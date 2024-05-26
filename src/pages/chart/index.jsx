@@ -1,52 +1,83 @@
 import React from "react";
 import Chart from "react-apexcharts";
+import { useState } from "react";
 import { useContext } from "react";
 import { GlobalContext } from "../../context/index";
-import "./chart.css";
+
 
 
 export default function ChartPage() {
-  const { formData, selectedDate } = useContext(GlobalContext);
+  const {  chartSeries, setChartSeries} = useContext(GlobalContext);
 
-  const formattedDate = selectedDate
-    ? new Date(selectedDate).toLocaleDateString()
-    : "";
-
-  const barData = [
-    { x: "BP Sys", y: formData.bpSys },
-    { x: "BP Dys", y: formData.bpDys },
-    { x: "Pulse Rate", y: formData.pulseRate },
-    { x: "Total Cholesterol", y: formData.totalCholesterol },
-    { x: "Hdl Cholesterol", y: formData.hdlCholesterol },
-    { x: "Ldl Cholesterol", y: formData.ldlCholesterol },
-    { x: "Blood Glucose Fasting", y: formData.bloodGlucoseFasting },
-    { x: "Blood Glucose PP", y: formData.bloodGlucosePP },
-    { x: "Creatinine", y: formData.creatinine },
-  ];
-
-  const series = [
-    {
-      name: "Data",
-      data: barData,
-    },
-  ];
-
-  const options = {
+  const [chartOptions, setChartOptions] = useState({
     chart: {
-      height: 350,
       type: "bar",
     },
     xaxis: {
-      categories: barData.map((data) => data.x),
+      categories: ["BP SYS", "BP DYS", "Pulse-Rate", "Total Chol","hdl Chol", "ldl Chol", "Blood Glucose Fasting",  "Blood Glucose PP", "Creatinine" ],
     },
-  };
+    plotOptions: {
+      bar: {
+        colors: {
+          ranges: [
+            {
+              from: -Infinity,
+              to: 89, // Red for values below 90 for both bpSys and bpDys
+              color: "#FF0000",
+              label: "Below 90",
+            },
+            {
+              from: 90,
+              to: 140, // Blue for values between 90 and 140 for bpSys
+              color: "#00BFFF",
+              label: "90 - 140 (SYS)",
+            },
+            {
+              from: 141, // Red for values above 140 for bpSys
+              to: Infinity,
+              color: "#FF0000",
+              label: "Above 140 (SYS)",
+            },
+            {
+              from: -Infinity,
+              to: 59, // Red for values below 60 for bpDys
+              color: "#FF0000",
+              label: "Below 60 (DYS)",
+            },
+            {
+              from: 60,
+              to: 90, // Blue for values between 60 and 90 for bpDys
+              color: "#00BFFF",
+              label: "60 - 90 (DYS)",
+            },
+            {
+              from: 91, // Red for values above 90 for bpDys
+              to: Infinity,
+              color: "#FF0000",
+              label: "Above 90 (DYS)",
+            },
+          ],
+          backgroundBarColors: ["#FFFFFF"], // Background color for bars
+          backgroundBarOpacity: 1, // Opacity of background color
+        },
+      },
+    },
+  });
+  
 
   return (
-    <div className="chart-container">
-      <div className="date-info">
-        <p>Selected Date: {formattedDate}</p>
-      </div>
-      <Chart options={options} series={series} type="bar" height={350}></Chart>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-5" >
+      {chartSeries.map((data, index) => (
+        <div key={index} className="mb-4">
+          <div className="text-center font-semibold mb-2">{data.date}</div>
+          <Chart
+            options={chartOptions}
+            series={[data]}
+            type="bar"
+            height={350}
+          />
+        </div>
+      ))}
     </div>
   );
 }

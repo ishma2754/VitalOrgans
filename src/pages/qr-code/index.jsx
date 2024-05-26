@@ -1,6 +1,17 @@
+import React, { useContext } from "react";
+
 
 
 
 export default function QrCodePage(){
-  return <div>QrCodePage</div>
+  
+
+
+  return (
+    <div>qrcode</div>
+  );
+
+ 
 }
+
+
