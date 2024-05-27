@@ -4,7 +4,7 @@ import Navbar from "./components/navbar";
 import QrCodePage from "./pages/qr-code";
 import ChartPage from "./pages/chart";
 import Input from "./pages/input-field";
-import Home from "./pages/home"
+import Home from "./pages/home";
 import ReportsPage from "./pages/ReportsPage";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
 
           <Route path="/QrCodePage" element={<QrCodePage />}></Route>
 
-          <Route path="/ReportsPage" element={<ReportsPage/>}></Route>
+          <Route path="/ReportsPage" element={<ReportsPage />}></Route>
         </Routes>
       </div>
     </div>

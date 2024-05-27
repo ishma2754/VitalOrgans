@@ -9,7 +9,7 @@ export default function GlobalState({ children }) {
     emergencyContact: "",
     gender: "",
     medicalConditions: "",
-    bloodGroup: ""
+    bloodGroup: "",
   });
 
   const [submittedData, setSubmittedData] = useState([]);
@@ -22,13 +22,10 @@ export default function GlobalState({ children }) {
     }));
   };
 
-
-
   const handleSubmitHome = (e) => {
     e.preventDefault();
-    setSubmittedData(formData); 
+    setSubmittedData(formData);
   };
-
 
   const [inputValues, setInputValues] = useState({
     bpSys: "",
@@ -43,8 +40,6 @@ export default function GlobalState({ children }) {
     date: "",
   });
 
- 
-
   const [chartSeries, setChartSeries] = useState([]);
 
   const handleChange = (e) => {
@@ -55,7 +50,6 @@ export default function GlobalState({ children }) {
     }));
   };
 
-  // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -69,37 +63,20 @@ export default function GlobalState({ children }) {
     const bloodGlucosePP = parseInt(inputValues.bloodGlucosePP);
     const creatinine = parseInt(inputValues.creatinine);
 
-    let colorSys = "#00BFFF"; // Default color is blue for SYS
-    let colorDys = "#00BFFF"; // Default color is blue for DYS
-
-    // Check if values are out of range and set color accordingly
-    if (bpSys < 90 || bpSys > 140) {
-      colorSys = "#FF0000"; // Change color to red if SYS value is out of range
-    }
-    if (bpDys < 60 || bpDys > 90) {
-      colorDys = "#FF0000"; // Change color to red if DYS value is out of range
-    }
-
- 
-
     const newChartData = {
-      name: "Blood Pressure",
       data: [
-        { x: "BP SYS", y: bpSys, color: colorSys },
-        { x: "BP DYS", y: bpDys, color: colorDys },
-        { x: "Pulse-Rate", y: pulseRate, color: colorDys },
-        { x: "Total Chol", y: totalCholesterol, color: colorDys },
-        { x: "hdl Chol", y: hdlCholesterol, color: colorDys },
-        { x: "ldl Chol", y: ldlCholesterol, color: colorDys },
-        { x: "Blood Glucose Fasting", y: bloodGlucoseFasting, color: colorDys },
-        { x: "Blood Glucose PP", y: bloodGlucosePP, color: colorDys },
-        { x: "Creatinine", y: creatinine, color: colorDys },
+        { x: "BP SYS", y: bpSys },
+        { x: "BP DYS", y: bpDys },
+        { x: "Pulse-Rate", y: pulseRate },
+        { x: "Total Chol", y: totalCholesterol },
+        { x: "hdl Chol", y: hdlCholesterol },
+        { x: "ldl Chol", y: ldlCholesterol },
+        { x: "Blood Glucose Fasting", y: bloodGlucoseFasting },
+        { x: "Blood Glucose PP", y: bloodGlucosePP },
+        { x: "Creatinine", y: creatinine },
       ],
       date: inputValues.date,
     };
-
-    console.log("Color SYS:", colorSys);
-    console.log("Color DYS:", colorDys);
 
     setChartSeries((prevChartSeries) => [...prevChartSeries, newChartData]);
   };

@@ -1,5 +1,3 @@
-import { useState } from "react";
-import Chart from "react-apexcharts";
 import { GlobalContext } from "../../context";
 import { useContext } from "react";
 
@@ -17,6 +15,7 @@ export default function Input() {
             id="date"
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             onChange={handleChange}
+            required
           />
         </div>
       </div>
@@ -173,7 +172,7 @@ export default function Input() {
             <input
               type="number"
               name="bloodGlucosePP"
-              value={inputValues.bloodGlucosePP || "" }
+              value={inputValues.bloodGlucosePP || ""}
               id="blood-glucose-pp"
               autoComplete="blood-glucose-pp"
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

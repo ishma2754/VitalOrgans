@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import { UserCircleIcon } from "@heroicons/react/outline";
 import { GlobalContext } from "../../context";
@@ -13,13 +13,21 @@ export default function Home() {
     setSubmittedData,
   } = useContext(GlobalContext);
 
+  const isEmergencyContactValid = (contactNumber) => {
+    const indianNumberPattern = /^[789]\d{9}$/;
+    return indianNumberPattern.test(contactNumber);
+  };
+
+
+
+
   return (
     <div>
       <div className="flex justify-center mt-8">
         <UserCircleIcon className="h-20 w-20 text-gray-600" />
       </div>
 
-      <form className="max-w-md mx-auto mt-8">
+      <form className="max-w-md mx-auto mt-8" onSubmit={handleSubmitHome}>
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="relative z-0 w-full mb-5 group">
             <input
@@ -51,12 +59,17 @@ export default function Home() {
           <div className="relative z-0 w-full mb-5 group">
             <input
               type="tel"
+              pattern="[789]\d{9}"
               name="emergencyContact"
               id="emergencyContact"
               value={formData.emergencyContact || ""}
               onChange={handleChangeHome}
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder="Emergency Contact Number"
+              className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${
+                isEmergencyContactValid(formData.emergencyContact)
+                  ? ""
+                  : "border-red-500"
+              }`}
+              placeholder="Emergency Contact Number (10 digits starting with 7, 8, or 9)"
               required
             />
           </div>
@@ -110,14 +123,15 @@ export default function Home() {
       <div className="flex justify-center mt-5">
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-10"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-5"
           onClick={handleSubmitHome}
+          disabled={!isEmergencyContactValid(formData.emergencyContact)}
         >
           Submit
         </button>
       </div>
 
-      <div className="max-w-md mx-auto mt-8  border border-gray-300 rounded p-4">
+      <div className="max-w-md mx-auto border border-gray-300 rounded p-4">
         <h2 className="text-lg font-semibold mb-4">Form Data</h2>
         <div className="grid grid-cols-2 gap-4">
           {Object.entries(submittedData).map(([key, value]) => (
