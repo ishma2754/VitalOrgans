@@ -4,213 +4,183 @@ import { useContext } from "react";
 export default function Input() {
   const { inputValues, handleChange, handleSubmit } = useContext(GlobalContext);
 
+
   return (
-    <div>
-      <div className=" mt-5 mx-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div className="">
+    <form onSubmit={handleSubmit}>
+      <div className="grid gap-6 mb-6 md:grid-cols-3 mt-6">
+        <input
+          type="date"
+          name="date"
+          id="date"
+          value={inputValues.date || ""}
+          onChange={handleChange}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder=""
+          required
+        />
+      </div>
+      <div className="grid gap-6 mb-6 md:grid-cols-3">
+        <div>
+          <label
+            htmlFor="bpSys"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            BP SYS / mmHg
+          </label>
           <input
-            type="date"
-            name="date"
-            value={inputValues.date || ""}
-            id="date"
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            type="number"
+            name="bpSys"
+            id="bpSys"
+            value={inputValues.bpSys || ""}
             onChange={handleChange}
-            required
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="bpDys"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            BP DYS / mmHg
+          </label>
+          <input
+            type="number"
+            name="bpDys"
+            id="bpDys"
+            value={inputValues.bpDys || ""}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder=""
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="pulseRate"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Pulse Rate beats/min
+          </label>
+          <input
+            type="number"
+            name="pulseRate"
+            id="pulseRate"
+            value={inputValues.pulseRate || ""}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder=""
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="totalCholesterol"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Total Cholesterol mg/dL
+          </label>
+          <input
+            type="number"
+            name="totalCholesterol"
+            id="totalCholesterol"
+            value={inputValues.totalCholesterol || ""}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder=""
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="hdlCholesterol"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            HDL Cholesterol mg/dL
+          </label>
+          <input
+            type="number"
+            name="hdlCholesterol"
+            id="hdlCholesterol"
+            value={inputValues.hdlCholesterol || ""}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder=""
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="ldlCholesterol"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            LDL Cholesterol mg/dL
+          </label>
+          <input
+            type="number"
+            name="ldlCholesterol"
+            id="ldlCholesterol"
+            value={inputValues.ldlCholesterol || ""}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder=""
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="bloodGlucoseFasting"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Blood Glucose(Fasting) mg/dL
+          </label>
+          <input
+            type="number"
+            name="bloodGlucoseFasting"
+            id="bloodGlucoseFasting"
+            value={inputValues.bloodGlucoseFasting || ""}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder=""
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="bloodGlucosePP"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Blood Glucose(PP) mg/dL
+          </label>
+          <input
+            type="number"
+            name="bloodGlucosePP"
+            id="bloodGlucosePP"
+            value={inputValues.bloodGlucosePP || ""}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder=""
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="creatinine"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Creatinine µmol/l
+          </label>
+          <input
+            type="number"
+            name="creatinine"
+            id="creatinine"
+            value={inputValues.creatinine || ""}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder=""
           />
         </div>
       </div>
 
-      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="bp-sys"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            BP SYS / mmHg
-          </label>
-          <div className="mt-2">
-            <input
-              type="number"
-              name="bpSys"
-              value={inputValues.bpSys || ""}
-              id="bp-sys"
-              autoComplete="bp-sys"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="bp-dys"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            BP DYS / mmHg
-          </label>
-          <div className="mt-2">
-            <input
-              type="number"
-              name="bpDys"
-              value={inputValues.bpDys || ""}
-              id="bp-dys"
-              autoComplete="bp-dys"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="pulse-rate"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Pulse Rate beats/min
-          </label>
-          <div className="mt-2">
-            <input
-              type="number"
-              name="pulseRate"
-              value={inputValues.pulseRate || ""}
-              id="pulse-rate"
-              autoComplete="pulse-rate"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="total-cholesterol"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Total Cholesterol mg/dL
-          </label>
-          <div className="mt-2">
-            <input
-              type="number"
-              name="totalCholesterol"
-              value={inputValues.totalCholesterol || ""}
-              id="total-cholesterol"
-              autoComplete="total-cholesterol"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="hdl-cholesterol"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            HDL Cholesterol mg/dL
-          </label>
-          <div className="mt-2">
-            <input
-              type="number"
-              name="hdlCholesterol"
-              value={inputValues.hdlCholesterol || ""}
-              id="hdl-cholesterol"
-              autoComplete="hdl-cholesterol"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="ldl-cholesterol"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            LDL Cholesterol mg/dL
-          </label>
-          <div className="mt-2">
-            <input
-              type="number"
-              name="ldlCholesterol"
-              value={inputValues.ldlCholesterol || ""}
-              id="ldl-cholesterol"
-              autoComplete="ldl-cholesterol"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="sm:col-span-2 sm:col-start-1">
-          <label
-            htmlFor="blood-glucose-fasting"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Blood Glucose(Fasting) mg/dL
-          </label>
-          <div className="mt-2">
-            <input
-              type="number"
-              name="bloodGlucoseFasting"
-              id="blood-glucose-fasting"
-              value={inputValues.bloodGlucoseFasting || ""}
-              autoComplete="blood-glucose-fasting"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="sm:col-span-2">
-          <label
-            htmlFor="blood-glucose-pp"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Blood Glucose(PP) mg/dL
-          </label>
-          <div className="mt-2">
-            <input
-              type="number"
-              name="bloodGlucosePP"
-              value={inputValues.bloodGlucosePP || ""}
-              id="blood-glucose-pp"
-              autoComplete="blood-glucose-pp"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="sm:col-span-2 mb-4">
-          <label
-            htmlFor="creatinine"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Creatinine µmol/l
-          </label>
-          <div className="mt-2">
-            <input
-              type="number"
-              name="creatinine"
-              value={inputValues.creatinine || ""}
-              id="creatinine"
-              autoComplete="creatinine"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-center mt-4">
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-10"
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
-      </div>
-    </div>
+      <button
+        type="submit"
+        onSubmit={handleSubmit}
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        Submit
+      </button>
+    </form>
   );
 }

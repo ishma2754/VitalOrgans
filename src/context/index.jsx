@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 
+
 export const GlobalContext = createContext(null);
 
 export default function GlobalState({ children }) {
@@ -24,6 +25,16 @@ export default function GlobalState({ children }) {
 
   const handleSubmitHome = (e) => {
     e.preventDefault();
+
+    setFormData({
+      name: "",
+      age: "",
+      emergencyContact: "",
+      gender: "",
+      bloodGroup: "",
+      medicalConditions: "",
+    });
+  
     setSubmittedData(formData);
   };
 
