@@ -13,15 +13,15 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          <Route path="/" element={<Home />}/>
 
-          <Route path="/Input" element={<Input />}></Route>
+          <Route path="/Input" element={<Input />}/>
 
-          <Route path="/ChartPage" element={<ChartPage />}></Route>
+          <Route path="/ChartPage" element={<ChartPage />}/>
 
-          <Route path="/QrCodePage" element={<QrCodePage />}></Route>
+          <Route path="/QrCodePage" element={<QrCodePage />}/>
 
-          <Route path="/ReportsPage" element={<ReportsPage />}></Route>
+          <Route path="/ReportsPage" element={<ReportsPage />}/>
         </Routes>
       </div>
     </div>

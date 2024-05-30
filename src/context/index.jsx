@@ -64,6 +64,19 @@ export default function GlobalState({ children }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    setInputValues({
+      bpSys: "",
+      bpDys: "",
+      pulseRate: "",
+      totalCholesterol: "",
+      hdlCholesterol: "",
+      ldlCholesterol: "",
+      bloodGlucoseFasting: "",
+      bloodGlucosePP: "",
+      creatinine: "",
+      date: "",
+    });
+
     const bpSys = parseInt(inputValues.bpSys);
     const bpDys = parseInt(inputValues.bpDys);
     const pulseRate = parseInt(inputValues.pulseRate);
