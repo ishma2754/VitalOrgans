@@ -12,7 +12,7 @@ export default function ChartPage() {
     xaxis: {
       categories: [
         "BP SYS",
-        "BP DYS",
+        "BP DIA",
         "Pulse-Rate",
         "Total Chol",
         "hdl Chol",
@@ -59,7 +59,7 @@ export default function ChartPage() {
     switch (category) {
       case "BP SYS":
         return value < 90 ? "#FF0000" : value <= 140 ? "#00ab41" : "#FF0000";
-      case "BP DYS":
+      case "BP DIA":
         return value < 60 ? "#FF0000" : value <= 90 ? "#00ab41" : "#FF0000";
       case "Pulse-Rate":
         return value < 60 ? "#FF0000" : value <= 100 ? "#00ab41" : "#FF0000";

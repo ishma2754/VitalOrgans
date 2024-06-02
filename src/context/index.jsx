@@ -40,7 +40,7 @@ export default function GlobalState({ children }) {
 
   const [inputValues, setInputValues] = useState({
     bpSys: "",
-    bpDys: "",
+    bpDia: "",
     pulseRate: "",
     totalCholesterol: "",
     hdlCholesterol: "",
@@ -66,7 +66,7 @@ export default function GlobalState({ children }) {
 
     setInputValues({
       bpSys: "",
-      bpDys: "",
+      bpDia: "",
       pulseRate: "",
       totalCholesterol: "",
       hdlCholesterol: "",
@@ -78,7 +78,7 @@ export default function GlobalState({ children }) {
     });
 
     const bpSys = parseInt(inputValues.bpSys);
-    const bpDys = parseInt(inputValues.bpDys);
+    const bpDia = parseInt(inputValues.bpDia);
     const pulseRate = parseInt(inputValues.pulseRate);
     const totalCholesterol = parseInt(inputValues.totalCholesterol);
     const hdlCholesterol = parseInt(inputValues.hdlCholesterol);
@@ -90,7 +90,7 @@ export default function GlobalState({ children }) {
     const newChartData = {
       data: [
         { x: "BP SYS", y: bpSys },
-        { x: "BP DYS", y: bpDys },
+        { x: "BP DIA", y: bpDia },
         { x: "Pulse-Rate", y: pulseRate },
         { x: "Total Chol", y: totalCholesterol },
         { x: "hdl Chol", y: hdlCholesterol },
