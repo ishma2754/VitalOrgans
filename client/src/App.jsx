@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 import "./App.css";
 import Navbar from "./components/navbar";
 import QrCodePage from "./pages/qr-code";
@@ -8,20 +9,22 @@ import Home from "./pages/home";
 import ReportsPage from "./pages/ReportsPage";
 
 function App() {
+  
+
   return (
     <div>
       <div className="App">
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />}/>
+          <Route path="/" element={<Home />} />
 
-          <Route path="/Input" element={<Input />}/>
+          <Route path="/Input" element={<Input />} />
 
-          <Route path="/ChartPage" element={<ChartPage />}/>
+          <Route path="/ChartPage" element={<ChartPage />} />
 
-          <Route path="/QrCodePage" element={<QrCodePage />}/>
+          <Route path="/QrCodePage" element={<QrCodePage />} />
 
-          <Route path="/ReportsPage" element={<ReportsPage />}/>
+          <Route path="/ReportsPage" element={<ReportsPage />} />
         </Routes>
       </div>
     </div>

@@ -1,19 +1,14 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 
 export const GlobalContext = createContext(null);
 
 export default function GlobalState({ children }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    age: "",
-    emergencyContact: "",
-    gender: "",
-    medicalConditions: "",
-    bloodGroup: "",
-  });
+  const [formData, setFormData] = useState(null);
 
-  const [submittedData, setSubmittedData] = useState([]);
+
+
+  //const [submittedData, setSubmittedData] = useState([]);
 
   const handleChangeHome = (e) => {
     const { name, value } = e.target;
@@ -26,7 +21,7 @@ export default function GlobalState({ children }) {
   const handleSubmitHome = (e) => {
     e.preventDefault();
 
-    setFormData({
+    /*setFormData({
       name: "",
       age: "",
       emergencyContact: "",
@@ -34,22 +29,12 @@ export default function GlobalState({ children }) {
       bloodGroup: "",
       medicalConditions: "",
     });
+    */
   
-    setSubmittedData(formData);
+    //setSubmittedData(formData);
   };
 
-  const [inputValues, setInputValues] = useState({
-    bpSys: "",
-    bpDia: "",
-    pulseRate: "",
-    totalCholesterol: "",
-    hdlCholesterol: "",
-    ldlCholesterol: "",
-    bloodGlucoseFasting: "",
-    bloodGlucosePP: "",
-    creatinine: "",
-    date: "",
-  });
+  const [inputValues, setInputValues] = useState(null);
 
   const [chartSeries, setChartSeries] = useState([]);
 
@@ -61,10 +46,46 @@ export default function GlobalState({ children }) {
     }));
   };
 
+
+
+  const userEmail = "ishma@test.com";
+ 
+
+  const getInputData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/Input/${userEmail}`);
+      const json = await response.json();
+      setInputValues(json);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const getFormData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/${userEmail}`);
+      const json = await response.json();
+      setFormData(json)
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => getInputData, []);
+
+  useEffect(() => getFormData, []);
+  console.log(inputValues);
+  console.log(formData);
+
+
+
+
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setInputValues({
+    /*setInputValues({
       bpSys: "",
       bpDia: "",
       pulseRate: "",
@@ -76,6 +97,7 @@ export default function GlobalState({ children }) {
       creatinine: "",
       date: "",
     });
+    */
 
     const bpSys = parseInt(inputValues.bpSys);
     const bpDia = parseInt(inputValues.bpDia);
@@ -112,8 +134,8 @@ export default function GlobalState({ children }) {
         setFormData,
         handleChangeHome,
         handleSubmitHome,
-        submittedData,
-        setSubmittedData,
+        //submittedData,
+        //setSubmittedData,
         inputValues,
         setInputValues,
         handleChange,
