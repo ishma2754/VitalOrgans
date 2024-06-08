@@ -1,7 +1,7 @@
 CREATE DATABASE vitalsdata;
 
 CREATE TABLE formData (
-  id SERIAL PRIMARY KEY,
+  id VARCHAR(255) PRIMARY KEY,
   user_email VARCHAR(255),
   name VARCHAR(255),
   age INTEGER,
@@ -12,7 +12,7 @@ CREATE TABLE formData (
 );
 
 CREATE TABLE inputValues (
-  id SERIAL PRIMARY KEY,
+   id VARCHAR(255) PRIMARY KEY,
   user_email VARCHAR(255),
   bpSys INTEGER,
   bpDia INTEGER,

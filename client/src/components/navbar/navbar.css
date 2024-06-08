@@ -101,3 +101,58 @@ nav .menu span {
       margin: 0.2rem 0.5rem;
   }
 }
+
+.circle {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background-color: #333;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  margin-left: auto; /* Push circle to the right */
+  margin-right: 10px;
+}
+
+.details {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+}
+
+.signup-button {
+  background-color: #333;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signup-button:hover {
+  background-color: #555; /* Change color on hover if desired */
+}
+
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .circle {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+
+  .details {
+    top: 45px;
+    right: -5px;
+  }
+}

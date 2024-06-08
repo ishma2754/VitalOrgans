@@ -1,21 +1,35 @@
 import React, { useState } from "react";
 import "./navbar.css";
 import { NavLink } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(null);
+  const [showDetails, setShowDetails] = useState(false);
+
+  const userEmail = cookies.Email;
+  const authToken = cookies.AuthToken;
+
+  const handleSignOut = () => {
+    console.log("singout");
+    removeCookie("Email");
+    removeCookie("AuthToken");
+    window.location.reload();
+  };
+
+  const toggleDetails = () => {
+    console.log("Toggling details");
+    setShowDetails(!showDetails);
+    console.log(showDetails);
+  };
 
   return (
     <nav>
       <NavLink to="/" className="title">
         Home
       </NavLink>
-      <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <ul className={menuOpen ? "open" : ""}>
+
+      <ul>
         <li>
           <NavLink to="/Input">Input</NavLink>
         </li>
@@ -29,6 +43,19 @@ export default function Navbar() {
           <NavLink to="/ReportsPage">Reports</NavLink>
         </li>
       </ul>
+
+      
+      <div className="circle" onClick={toggleDetails}>
+        {showDetails ? (
+          <div className="details">
+            <p>Welcome, {cookies.Email}</p>
+            <button className="signup-button"  onClick={handleSignOut}>Sign Out</button>
+          </div>
+        ) : (
+          <span></span>
+        )}
+      </div>
+
     </nav>
   );
 }

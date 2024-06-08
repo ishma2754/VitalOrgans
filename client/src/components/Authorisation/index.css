@@ -1,0 +1,43 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  margin :5px;
+}
+
+.auth-container-box {
+  width: 500px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: rgba(0,0,0,0.5) 0 6px 24px 0, rgba(0,0,0,0.08) 0 0 0 1px;
+}
+
+.auth-container-box form {
+display: flex;
+flex-direction: column;
+height: 350px;
+padding: 20px;
+
+}
+
+.auth-options button {
+  width: 50%;
+  border: none;
+  padding: 10px;
+  color: rgb(35,38,47) 
+}
+
+.create {
+  border: 1.5px solid rgb(108,115,148);
+  color: rgb(108,115,148);
+  text-transform: uppercase;
+}
+
+.create:hover {
+  background-color: rgb(131,138,172);
+}
+
+.create:active {
+  background-color: rgb(108,115,148);
+  color: (255,255,255);
+}
+

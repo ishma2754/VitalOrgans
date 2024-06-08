@@ -1,17 +1,95 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 import { UserCircleIcon } from "@heroicons/react/outline";
-import { GlobalContext } from "../../context";
 
 export default function Home() {
-  const {
-    formData,
-    setFormData,
-    handleChangeHome,
-    handleSubmitHome,
-    submittedData,
-    setSubmittedData,
-  } = useContext(GlobalContext);
+  const [cookies, setCookie, removeCookie] = useCookies(null);
+  const userEmail = cookies.Email;
+  const authToken = cookies.AuthToken;
+  const [formData, setFormData] = useState(null);
+
+  const getFormData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/${userEmail}`);
+      const json = await response.json();
+      setFormData(json);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (authToken) {
+      getFormData();
+    }
+  }, []);
+
+  const [data, setData] = useState({
+    user_email: cookies.Email,
+    name: "",
+    age: "",
+    emergencycontact: "",
+    gender: "",
+    medicalconditions: "",
+    bloodgroup: "",
+  });
+
+  const postData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (response.status === 200) {
+        console.log("worked");
+        getFormData();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const updateData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (response.status === 200) {
+        console.log("updated successfully");
+        getFormData();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSubmitHome = async (e) => {
+    e.preventDefault();
+    /*
+
+    if (formData) {
+      await updateData();
+    } else {
+      await postData();
+    }
+      */
+    await postData();
+   
+  };
+
+  const handleChangeHome = (e) => {
+    const { name, value } = e.target;
+    setData((data) => ({
+      ...data,
+      [name]: value,
+    }));
+  };
+
+  const sortedFormData = formData?.sort((a, b) => b.id - a.id);
 
   return (
     <div>
@@ -26,7 +104,7 @@ export default function Home() {
               type="text"
               name="name"
               id="name"
-              value={formData.name || ""}
+              value={data.name}
               onChange={handleChangeHome}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=""
@@ -44,7 +122,7 @@ export default function Home() {
               type="number"
               name="age"
               id="age"
-              value={formData.age || ""}
+              value={data.age}
               onChange={handleChangeHome}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
@@ -63,16 +141,16 @@ export default function Home() {
             <input
               type="tel"
               pattern="[789][0-9]{9}"
-              name="emergencyContact"
-              id="emergencyContact"
-              value={formData.emergencyContact || ""}
+              name="emergencycontact"
+              id="emergencycontact"
+              value={data.emergencycontact}
               onChange={handleChangeHome}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
             />
             <label
-              htmlFor="emergencyContact"
+              htmlFor="emergencycontact"
               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Emergency Contact
@@ -82,7 +160,7 @@ export default function Home() {
             <select
               name="gender"
               id="gender"
-              value={formData.gender || ""}
+              value={data.gender}
               onChange={handleChangeHome}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               required
@@ -107,9 +185,9 @@ export default function Home() {
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="relative z-0 w-full mb-5 group">
             <select
-              name="bloodGroup"
+              name="bloodgroup"
               id="bloodgroup"
-              value={formData.bloodGroup || ""}
+              value={data.bloodgroup}
               onChange={handleChangeHome}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               required
@@ -127,7 +205,7 @@ export default function Home() {
               <option value="O-">O-</option>
             </select>
             <label
-              htmlFor="bloodGroup"
+              htmlFor="bloodgroup"
               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Blood Group
@@ -136,18 +214,18 @@ export default function Home() {
         </div>
 
         <label
-          htmlFor="medical-condition"
+          htmlFor="medicalconditions"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Medical Condition
+          Medical Conditions
         </label>
         <textarea
-          id="medical-condition"
-          value={formData.medicalConditions || ""}
+          id="medicalconditions"
+          value={data.medicalconditions}
           onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              medicalConditions: e.target.value,
+            setData((data) => ({
+              ...data,
+              medicalconditions: e.target.value,
             }))
           }
           rows="4"
@@ -157,8 +235,8 @@ export default function Home() {
 
         <button
           type="submit"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
           onSubmit={handleSubmitHome}
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Submit
         </button>
@@ -166,11 +244,33 @@ export default function Home() {
 
       <div className="max-w-md mx-auto border border-gray-300 rounded p-4 mt-8">
         <h2 className="text-lg font-semibold mb-4">Form Data</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {Object.entries(submittedData).map(([key, value]) => (
-            <div key={key}>
-              <div className="font-semibold">{key}</div>
-              <div>{value}</div>
+        <div className="">
+          {sortedFormData?.map((formDataItem) => (
+            <div key={formDataItem.id} className="grid grid-cols-3 gap-4">
+              <div>
+                <div className="font-semibold">Name</div>
+                <div>{formDataItem.name}</div>
+              </div>
+              <div>
+                <div className="font-semibold">Age</div>
+                <div>{formDataItem.age}</div>
+              </div>
+              <div>
+                <div className="font-semibold">Blood Group</div>
+                <div>{formDataItem.bloodgroup}</div>
+              </div>
+              <div>
+                <div className="font-semibold">Emergency Contact</div>
+                <div>{formDataItem.emergencycontact}</div>
+              </div>
+              <div>
+                <div className="font-semibold">Gender</div>
+                <div>{formDataItem.gender}</div>
+              </div>
+              <div className="col-span-3">
+                <div className="font-semibold">Medical Conditions</div>
+                <div>{formDataItem.medicalconditions}</div>
+              </div>
             </div>
           ))}
         </div>

@@ -1,18 +1,28 @@
-import { GlobalContext } from "../../context";
-import { useContext } from "react";
+
+import { useContext} from "react";
+import { GlobalContext } from "../../context/index";
+
 
 export default function Input() {
-  const { inputValues, handleChange, handleSubmit } = useContext(GlobalContext);
-
+  const {  dataInput,
+    setDataInput,
+    inputValues,
+    setInputValues,
+    getInputData,
+    handleChange,
+    handleSubmit, } = useContext(GlobalContext);
+   
 
   return (
+
+    <>
     <form onSubmit={handleSubmit} className="mx-6 mt-8">
       <div className="grid gap-6 mb-6 md:grid-cols-3 mt-6">
         <input
           type="date"
           name="date"
           id="date"
-          value={inputValues.date || ""}
+          value={dataInput.date}
           onChange={handleChange}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder=""
@@ -22,32 +32,32 @@ export default function Input() {
       <div className="grid gap-6 mb-6 md:grid-cols-3">
         <div>
           <label
-            htmlFor="bpSys"
+            htmlFor="bpsys"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             BP SYS / mmHg
           </label>
           <input
             type="number"
-            name="bpSys"
-            id="bpSys"
-            value={inputValues.bpSys || ""}
+            name="bpsys"
+            id="bpsys"
+            value={dataInput.bpsys}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
         </div>
         <div>
           <label
-            htmlFor="bpDia"
+            htmlFor="bpdia"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             BP DIA / mmHg
           </label>
           <input
             type="number"
-            name="bpDia"
-            id="bpDia"
-            value={inputValues.bpDia || ""}
+            name="bpdia"
+            id="bpdia"
+            value={dataInput.bpdia}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder=""
@@ -55,16 +65,16 @@ export default function Input() {
         </div>
         <div>
           <label
-            htmlFor="pulseRate"
+            htmlFor="pulserate"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Pulse Rate beats/min
           </label>
           <input
             type="number"
-            name="pulseRate"
-            id="pulseRate"
-            value={inputValues.pulseRate || ""}
+            name="pulserate"
+            id="pulserate"
+            value={dataInput.pulserate}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder=""
@@ -72,16 +82,16 @@ export default function Input() {
         </div>
         <div>
           <label
-            htmlFor="totalCholesterol"
+            htmlFor="totalcholesterol"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Total Cholesterol mg/dL
           </label>
           <input
             type="number"
-            name="totalCholesterol"
-            id="totalCholesterol"
-            value={inputValues.totalCholesterol || ""}
+            name="totalcholesterol"
+            id="totalcholesterol"
+            value={dataInput.totalcholesterol}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder=""
@@ -89,16 +99,16 @@ export default function Input() {
         </div>
         <div>
           <label
-            htmlFor="hdlCholesterol"
+            htmlFor="hdlcholesterol"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             HDL Cholesterol mg/dL
           </label>
           <input
             type="number"
-            name="hdlCholesterol"
-            id="hdlCholesterol"
-            value={inputValues.hdlCholesterol || ""}
+            name="hdlcholesterol"
+            id="hdlcholesterol"
+            value={dataInput.hdlcholesterol}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder=""
@@ -106,16 +116,16 @@ export default function Input() {
         </div>
         <div>
           <label
-            htmlFor="ldlCholesterol"
+            htmlFor="ldlcholesterol"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             LDL Cholesterol mg/dL
           </label>
           <input
             type="number"
-            name="ldlCholesterol"
-            id="ldlCholesterol"
-            value={inputValues.ldlCholesterol || ""}
+            name="ldlcholesterol"
+            id="ldlcholesterol"
+            value={dataInput.ldlcholesterol}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder=""
@@ -123,16 +133,16 @@ export default function Input() {
         </div>
         <div>
           <label
-            htmlFor="bloodGlucoseFasting"
+            htmlFor="bloodglucosefasting"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Blood Glucose(Fasting) mg/dL
           </label>
           <input
             type="number"
-            name="bloodGlucoseFasting"
-            id="bloodGlucoseFasting"
-            value={inputValues.bloodGlucoseFasting || ""}
+            name="bloodglucosefasting"
+            id="bloodglucosefasting"
+            value={dataInput.bloodglucosefasting}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder=""
@@ -140,16 +150,16 @@ export default function Input() {
         </div>
         <div>
           <label
-            htmlFor="bloodGlucosePP"
+            htmlFor="bloodglucosepp"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Blood Glucose(PP) mg/dL
           </label>
           <input
             type="number"
-            name="bloodGlucosePP"
-            id="bloodGlucosePP"
-            value={inputValues.bloodGlucosePP || ""}
+            name="bloodglucosepp"
+            id="bloodglucosepp"
+            value={dataInput.bloodglucosepp}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder=""
@@ -166,7 +176,7 @@ export default function Input() {
             type="number"
             name="creatinine"
             id="creatinine"
-            value={inputValues.creatinine || ""}
+            value={dataInput.creatinine}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder=""
@@ -182,5 +192,10 @@ export default function Input() {
         Submit
       </button>
     </form>
+
+    
+  
+
+    </>
   );
 }
