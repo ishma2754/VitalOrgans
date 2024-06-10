@@ -1,6 +1,8 @@
 const PORT = process.env.PORT ?? 8000;
 const express = require("express");
 const { v4: uuidv4 } = require("uuid");
+const multer = require('multer');
+const path = require('path');
 const cors = require("cors");
 const app = express();
 const pool = require("./db");
@@ -9,6 +11,55 @@ const jwt = require('jsonwebtoken');
 
 app.use(cors());
 app.use(express.json());
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Store uploaded files in the 'uploads' folder
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Maintain the original name of the file
+  }
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/ReportsPage', upload.single('pdfFile'), async (req, res) => {
+  const { user_email } = req.body;
+  const file_path = req.file.path;
+  const file_name = req.file.originalname;
+
+  try {
+    const id = uuidv4();
+    await pool.query(
+      `INSERT INTO pdf_reports(id, user_email, file_path, file_name) 
+       VALUES($1, $2, $3, $4)`,
+      [id, user_email, file_path, file_name]
+    );
+
+    res.json({ message: 'PDF file uploaded successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred while uploading the PDF file' });
+  }
+});
+
+
+app.get("/ReportsPage/:userEmail", async (req, res) => {
+  const { userEmail } = req.params;
+
+  try {
+    const pdfReports = await pool.query(
+      "SELECT * FROM pdf_reports WHERE user_email = $1",
+      [userEmail]
+    );
+    res.json(pdfReports.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while fetching PDF reports" });
+  }
+});
+
+
 
 //get all the input data
 
@@ -227,5 +278,9 @@ app.post('/login', async (req, res) => {
     console.error(err)
   }
 })
+
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));

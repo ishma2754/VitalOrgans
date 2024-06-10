@@ -30,3 +30,12 @@ CREATE TABLE users (
     email VARCHAR(255) PRIMARY KEY,
     hashed_password VARCHAR(255)
 );
+
+
+CREATE TABLE pdf_reports (
+  id VARCHAR(255) PRIMARY KEY,
+  user_email VARCHAR(255),
+  file_path VARCHAR(255),
+  file_name VARCHAR(255),
+  uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
