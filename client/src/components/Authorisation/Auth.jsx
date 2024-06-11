@@ -10,6 +10,7 @@ export default function Auth() {
   const [password, setPassword]  = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null)
   const [error, setError] = useState(null);
+  const [licenseKey, setLicenseKey] = useState(null);
 
 
 
@@ -29,7 +30,7 @@ export default function Auth() {
     const response = await fetch(`http://localhost:8000/${endpoint}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email, password})
+      body: JSON.stringify({email, password, license_key: licenseKey})
     });
 
     const data = await response.json()
@@ -38,6 +39,7 @@ export default function Auth() {
     }else {
       setCookie('Email',data.email)
       setCookie('AuthToken', data.token)
+      setCookie('Role', data.role)
 
       window.location.reload()
     }
@@ -62,11 +64,19 @@ export default function Auth() {
           />
 
           {!isLogIn && (
+             <>
           <input 
           type="password" 
           placeholder="confirm password"  
           onChange={(e) => setConfirmPassword(e.target.value)}
           />
+
+          <input 
+          type="text" 
+          placeholder="license key (optional)"  
+          onChange={(e) => setLicenseKey(e.target.value)}
+        />
+        </>
           )}
 
           <input 

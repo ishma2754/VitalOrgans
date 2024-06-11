@@ -28,7 +28,9 @@ CREATE TABLE inputValues (
 
 CREATE TABLE users (
     email VARCHAR(255) PRIMARY KEY,
-    hashed_password VARCHAR(255)
+    hashed_password VARCHAR(255),
+    role VARCHAR(50) DEFAULT 'user',
+    license_key VARCHAR(255)
 );
 
 

@@ -1,8 +1,8 @@
 const PORT = process.env.PORT ?? 8000;
 const express = require("express");
-const { v4: uuidv4 } = require("uuid");
 const multer = require('multer');
 const path = require('path');
+const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 const app = express();
 const pool = require("./db");
@@ -11,6 +11,7 @@ const jwt = require('jsonwebtoken');
 
 app.use(cors());
 app.use(express.json());
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -58,6 +59,7 @@ app.get("/ReportsPage/:userEmail", async (req, res) => {
     res.status(500).json({ error: "An error occurred while fetching PDF reports" });
   }
 });
+
 
 
 
@@ -236,17 +238,30 @@ app.post("/Input", async (req, res) => {
 });
 
 //sign up
+
 app.post('/signup', async (req, res) => {
-  const {email, password } = req.body;
+  const {email, password, license_key } = req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
 
+  let role = 'user';
+
+  if (license_key) {
+    const licensePattern = /^HSP-\d{4,5}-\d{4}-IN$/;
+    if (licensePattern.test(license_key)){
+      role = 'admin';
+
+    }else {
+      return res.status(400).json({detail: 'Invalid license key format'});
+    }
+  }
+
   try{
-    const signUp = await pool.query(`INSERT INTO users (email, hashed_password) VALUES($1, $2)`, [email, hashedPassword])
+    const signUp = await pool.query(`INSERT INTO users (email, hashed_password, role, license_key) VALUES($1, $2, $3, $4)`, [email, hashedPassword, role, license_key]);
 
-    const token = jwt.sign({email}, 'secret', {expiresIn: '1hr'})
+    const token = jwt.sign({email, role}, 'secret', {expiresIn: '1hr'})
 
-    res.json({email, token})
+    res.json({email, role, token})
 
   }catch (err){
     console.error(err)
@@ -254,22 +269,24 @@ app.post('/signup', async (req, res) => {
       res.json({detail: err.detail})
     }
   }
-})
+});
+
 
 
 //login
-
 app.post('/login', async (req, res) => {
   const {email, password } = req.body;
   try{
    const users =  await pool.query('SELECT * FROM users WHERE email = $1', [email])
    if (!users.rows.length) return res.json({details: 'User does not exist!'})
 
-    const success = await bcrypt.compare(password, users.rows[0].hashed_password);
-    const token = jwt.sign({email}, 'secret', {expiresIn: '1hr'})
+
+    const user = users.rows[0];
+    const success = await bcrypt.compare(password, user.hashed_password);
+    const token = jwt.sign({email, role: user.role}, 'secret', {expiresIn: '1hr'})
 
     if(success){
-      res.json({'email' : users.rows[0].email, token})
+      res.json({'email' : user.email, role: user.role, token})
     }else {
       res.json({detail : "Login failed"})
     }
@@ -277,7 +294,47 @@ app.post('/login', async (req, res) => {
   }catch (err){
     console.error(err)
   }
-})
+});
+
+const authenticateJWT = (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1];
+
+  if (token) {
+    jwt.verify(token, 'secret', (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
+
+const authorizeRole = (roles) => (req, res, next) => {
+  if (!roles.includes(req.user.role)) {
+    return res.sendStatus(403);
+  }
+  next();
+};
+
+
+app.get("/AdminPage/:userEmail", authenticateJWT, authorizeRole(['admin']), async (req, res) => {
+  const { userEmail } = req.params;
+
+  try {
+    const formDataValues = await pool.query(
+      "SELECT * FROM formData WHERE user_email = $1",
+      [userEmail]
+    );
+    res.json(formDataValues.rows);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

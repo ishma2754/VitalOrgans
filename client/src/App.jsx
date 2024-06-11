@@ -7,6 +7,9 @@ import ChartPage from "./pages/chart";
 import Input from "./pages/input-field";
 import Home from "./pages/home";
 import ReportsPage from "./pages/ReportsPage";
+import AdminIntro from "./pages/AdminIntro";
+import AdminFetchUser from "./pages/AdminPage"
+import QrCodeScan from "./pages/QrCodeScan";
 import { useCookies } from "react-cookie";
 
 function App() {
@@ -14,6 +17,7 @@ function App() {
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const userEmail = cookies.Email;
   const authToken = cookies.AuthToken;
+  const userRole = cookies.Role;
   
 
   return (
@@ -25,6 +29,16 @@ function App() {
         <>
          <Navbar />
         <Routes>
+
+        {userRole === 'admin' ? (
+          <>
+          <Route path="/" element={<AdminIntro />} />
+          <Route path="/AdminPage" element={<AdminFetchUser />} />
+
+          <Route path="/QRcodeScan" element={<QrCodeScan/>} />
+          </>
+        ) : (
+          <>
           <Route path="/" element={<Home />} />
 
           <Route path="/Input" element={<Input />} />
@@ -34,6 +48,9 @@ function App() {
           <Route path="/QrCodePage" element={<QrCodePage />} />
 
           <Route path="/ReportsPage" element={<ReportsPage />} />
+
+          </>
+        )}
         </Routes>
         </>
         }
