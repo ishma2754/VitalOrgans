@@ -15,11 +15,11 @@ export default function GlobalState({ children }) {
   const [inputValues, setInputValues] = useState(null);
 
   
-
+  
 
   const getInputData = async () => {
      try {
-       const response = await fetch(`http://localhost:8000/Input/${userEmail}`);
+       const response = await fetch(`${import.meta.env.VITE_APP_SERVERURL}/Input/${userEmail}`);
        const json = await response.json();
        setInputValues(json);
      } catch (err) {
@@ -51,7 +51,7 @@ export default function GlobalState({ children }) {
  
   const postInputData = async () => {
     try {
-        const response = await fetch(`http://localhost:8000/Input/`, {
+        const response = await fetch(`${import.meta.env.VITE_APP_SERVERURL}/Input/`, {
           method: "POST", 
           headers: {'Content-Type' : 'application/json'},
           body: JSON.stringify(dataInput)
@@ -85,6 +85,8 @@ export default function GlobalState({ children }) {
 
   };
 
+
+
   return (
     <GlobalContext.Provider
       value={{
@@ -100,7 +102,7 @@ export default function GlobalState({ children }) {
         userEmail,
         cookies, 
         setCookie, 
-        removeCookie
+        removeCookie,
       }}
     >
       {children}

@@ -25,19 +25,14 @@ export default function Navbar() {
     <nav>
       {userRole === "admin" ? (
         <>
-          <NavLink to="/" className="title">
-            Admin Intro
+          <NavLink to="/AdminPage" className="logo-link title">
+          <img src="/logo.png" alt="VitalOrgans" className="logo" />
           </NavLink>
-
-          <ul>
-          <li><NavLink to="/QrCodeScan">QR Code Scan</NavLink></li>
-          <li><NavLink to="/AdminPage">Fetch User Data</NavLink></li>
-          </ul>
         </>
       ) : (
         <>
-          <NavLink to="/" className="title">
-            Home
+          <NavLink to="/" className="logo-link title">
+          <img src="/logo.png" alt="VitalOrgans" className="logo" />
           </NavLink>
 
           <ul>
@@ -46,9 +41,6 @@ export default function Navbar() {
             </li>
             <li>
               <NavLink to="/ChartPage">Charts</NavLink>
-            </li>
-            <li>
-              <NavLink to="/QrCodePage">QrCode</NavLink>
             </li>
             <li>
               <NavLink to="/ReportsPage">Reports</NavLink>
@@ -60,7 +52,7 @@ export default function Navbar() {
       <div className="circle" onClick={toggleDetails}>
         {showDetails ? (
           <div className="details">
-            <p>Welcome, {cookies.Email}</p>
+            <p>Welcome {cookies.Email}</p>
             <button className="signup-button" onClick={handleSignOut}>
               Sign Out
             </button>

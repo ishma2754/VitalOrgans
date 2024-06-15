@@ -50,7 +50,7 @@ export default function Auth() {
     <div className="auth-container">
       <div className="auth-container-box">
         <form>
-          <h2>{isLogIn ? "Please Log in" : "Please sign up"}</h2>
+          <h2 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mb-5">{isLogIn ? "Please Log in" : "Please sign up"}</h2>
           <input 
           type="email" 
           placeholder="email" 
@@ -67,7 +67,7 @@ export default function Auth() {
              <>
           <input 
           type="password" 
-          placeholder="confirm password"  
+          placeholder="confirm password" 
           onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
@@ -81,7 +81,7 @@ export default function Auth() {
 
           <input 
           type="submit" 
-          className="create" 
+          className="create " 
           onClick={(e) => handleSubmit(e, isLogIn ? 'login' : 'signup')}
           />
 

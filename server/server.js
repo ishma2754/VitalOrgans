@@ -1,49 +1,116 @@
 const PORT = process.env.PORT ?? 8000;
 const express = require("express");
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 const app = express();
 const pool = require("./db");
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+
+require("dotenv").config();
+
+const bucketName = process.env.AWS_BUCKET_NAME;
+const region = process.env.AWS_BUCKET_REGION;
+const accessKeyId = process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+
+const s3Client = new S3Client({
+  region,
+  credentials: {
+    accessKeyId,
+    secretAccessKey,
+  },
+});
 
 app.use(cors());
 app.use(express.json());
 
-
+const generateFileName = (bytes = 32) =>
+  crypto.randomBytes(bytes).toString("hex");
+/*
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Store uploaded files in the 'uploads' folder
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname); // Maintain the original name of the file
+    cb(null, file.originalname);
+  },
+});*/
+
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  const filetypes = /pdf/;
+  const mimetype = filetypes.test(file.mimetype);
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  //const extname = path.extname(file.originalname).toLowerCase();
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb(new Error("Only PDF files are allowed!"));
   }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-const upload = multer({ storage: storage });
+app.post("/ReportsPage", upload.single("pdfFile"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "PDF file is required" });
+  }
 
-app.post('/ReportsPage', upload.single('pdfFile'), async (req, res) => {
+  if (req.file.size > 5 * 1024 * 1024) {
+    return res.status(400).json({
+      error: "File size limit exceeded. Please upload a file under 5MB.",
+    });
+  }
+
   const { user_email } = req.body;
-  const file_path = req.file.path;
-  const file_name = req.file.originalname;
+  const fileBuffer = req.file.buffer;
+  const fileName = generateFileName();
+
+  const key = `${fileName}.pdf`;
+
+  const bucket = bucketName;
+
+  const uploadParams = {
+    Bucket: bucket,
+    Key: key,
+    Body: fileBuffer,
+    ContentType: req.file.mimetype,
+  };
 
   try {
+    await s3Client.send(new PutObjectCommand(uploadParams));
+
     const id = uuidv4();
     await pool.query(
       `INSERT INTO pdf_reports(id, user_email, file_path, file_name) 
        VALUES($1, $2, $3, $4)`,
-      [id, user_email, file_path, file_name]
+      [id, user_email, fileName, req.file.originalname]
     );
 
-    res.json({ message: 'PDF file uploaded successfully' });
+    res.json({ message: "PDF file uploaded successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'An error occurred while uploading the PDF file' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while uploading the PDF file" });
   }
 });
-
 
 app.get("/ReportsPage/:userEmail", async (req, res) => {
   const { userEmail } = req.params;
@@ -53,22 +120,41 @@ app.get("/ReportsPage/:userEmail", async (req, res) => {
       "SELECT * FROM pdf_reports WHERE user_email = $1",
       [userEmail]
     );
+    /*
     res.json(pdfReports.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "An error occurred while fetching PDF reports" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching PDF reports" });
+  }*/
+
+    for (let report of pdfReports.rows) {
+      const signedurl = await getSignedUrl(
+        s3Client,
+        new GetObjectCommand({
+          Bucket: bucketName,
+          Key: `${report.file_path}.pdf`,
+        }),
+        { expiresIn: 60 }
+      );
+
+      report.signedurl = signedurl;
+    }
+
+    res.json(pdfReports.rows);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching PDF reports" });
   }
 });
-
-
-
 
 //get all the input data
 
 app.get("/Input/:userEmail", async (req, res) => {
- 
   const { userEmail } = req.params;
-  
 
   try {
     const inputValues = await pool.query(
@@ -85,7 +171,6 @@ app.get("/Input/:userEmail", async (req, res) => {
 app.get("/:userEmail", async (req, res) => {
   console.log(req);
   const { userEmail } = req.params;
-  console.log(userEmail);
 
   try {
     const inputValues = await pool.query(
@@ -97,8 +182,6 @@ app.get("/:userEmail", async (req, res) => {
     console.log(err);
   }
 });
-
-
 
 app.post("/", async (req, res) => {
   const {
@@ -212,7 +295,7 @@ app.post("/Input", async (req, res) => {
     creatinine,
     date
   );
- const id = uuidv4();
+  const id = uuidv4();
   try {
     const newInputValues = pool.query(
       `INSERT INTO inputValues (id, user_email, bpsys, bpdia, pulserate, totalcholesterol , hdlcholesterol, ldlcholesterol, bloodglucosefasting, bloodglucosepp, creatinine, date) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
@@ -239,68 +322,70 @@ app.post("/Input", async (req, res) => {
 
 //sign up
 
-app.post('/signup', async (req, res) => {
-  const {email, password, license_key } = req.body;
+app.post("/signup", async (req, res) => {
+  const { email, password, license_key } = req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
 
-  let role = 'user';
+  let role = "user";
 
   if (license_key) {
     const licensePattern = /^HSP-\d{4,5}-\d{4}-IN$/;
-    if (licensePattern.test(license_key)){
-      role = 'admin';
-
-    }else {
-      return res.status(400).json({detail: 'Invalid license key format'});
+    if (licensePattern.test(license_key)) {
+      role = "admin";
+    } else {
+      return res.status(400).json({ detail: "Invalid license key format" });
     }
   }
 
-  try{
-    const signUp = await pool.query(`INSERT INTO users (email, hashed_password, role, license_key) VALUES($1, $2, $3, $4)`, [email, hashedPassword, role, license_key]);
+  try {
+    const signUp = await pool.query(
+      `INSERT INTO users (email, hashed_password, role, license_key) VALUES($1, $2, $3, $4)`,
+      [email, hashedPassword, role, license_key]
+    );
 
-    const token = jwt.sign({email, role}, 'secret', {expiresIn: '1hr'})
+    const token = jwt.sign({ email, role }, "secret", { expiresIn: "1hr" });
 
-    res.json({email, role, token})
-
-  }catch (err){
-    console.error(err)
-    if(err){
-      res.json({detail: err.detail})
+    res.json({ email, role, token });
+  } catch (err) {
+    console.error(err);
+    if (err) {
+      res.json({ detail: err.detail });
     }
   }
 });
 
-
-
 //login
-app.post('/login', async (req, res) => {
-  const {email, password } = req.body;
-  try{
-   const users =  await pool.query('SELECT * FROM users WHERE email = $1', [email])
-   if (!users.rows.length) return res.json({details: 'User does not exist!'})
-
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const users = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+    if (!users.rows.length)
+      return res.json({ details: "User does not exist!" });
 
     const user = users.rows[0];
     const success = await bcrypt.compare(password, user.hashed_password);
-    const token = jwt.sign({email, role: user.role}, 'secret', {expiresIn: '1hr'})
+    const token = jwt.sign({ email, role: user.role }, "secret", {
+      expiresIn: "1hr",
+    });
 
-    if(success){
-      res.json({'email' : user.email, role: user.role, token})
-    }else {
-      res.json({detail : "Login failed"})
+    if (success) {
+      res.json({ email: user.email, role: user.role, token });
+    } else {
+      res.json({ detail: "Login failed" });
     }
-
-  }catch (err){
-    console.error(err)
+  } catch (err) {
+    console.error(err);
   }
 });
 
 const authenticateJWT = (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1];
+  const token = req.headers.authorization.split(" ")[1];
 
   if (token) {
-    jwt.verify(token, 'secret', (err, user) => {
+    jwt.verify(token, "secret", (err, user) => {
       if (err) {
         return res.sendStatus(403);
       }
@@ -319,25 +404,107 @@ const authorizeRole = (roles) => (req, res, next) => {
   next();
 };
 
+app.get(
+  "/AdminPage/:userEmail",
+  authenticateJWT,
+  authorizeRole(["admin"]),
+  async (req, res) => {
+    const { userEmail } = req.params;
 
-app.get("/AdminPage/:userEmail", authenticateJWT, authorizeRole(['admin']), async (req, res) => {
-  const { userEmail } = req.params;
-
-  try {
-    const formDataValues = await pool.query(
-      "SELECT * FROM formData WHERE user_email = $1",
-      [userEmail]
-    );
-    res.json(formDataValues.rows);
-  } catch (err) {
-    console.log(err);
+    try {
+      const formDataValues = await pool.query(
+        "SELECT * FROM formData WHERE user_email = $1",
+        [userEmail]
+      );
+      res.json(formDataValues.rows);
+    } catch (err) {
+      console.log(err);
+    }
   }
-});
+);
 
+app.get(
+  "/AdminPage/InputValues/:userEmail",
+  authenticateJWT,
+  authorizeRole(["admin"]),
+  async (req, res) => {
+    const { userEmail } = req.params;
 
+    try {
+      const inputValues = await pool.query(
+        "SELECT * FROM inputValues WHERE user_email = $1",
+        [userEmail]
+      );
+      res.json(inputValues.rows);
+    } catch (err) {
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "An error occurred while fetching input values data" });
+    }
+  }
+);
 
+app.get(
+  "/AdminPage/PDFData/:userEmail",
+  authenticateJWT,
+  authorizeRole(["admin"]),
+  async (req, res) => {
+    /*
+    const { userEmail } = req.params;
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+    try {
+      const pdfReports = await pool.query(
+        "SELECT * FROM pdf_reports WHERE user_email = $1",
+        [userEmail]
+      );
+      res.json(pdfReports.rows);
+    } catch (err) {
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "An error occurred while fetching PDF data" });
+    }
+  }
+    */
+    const { userEmail } = req.params;
 
+    try {
+      const pdfReports = await pool.query(
+        "SELECT * FROM pdf_reports WHERE user_email = $1",
+        [userEmail]
+      );
+      /*
+    res.json(pdfReports.rows);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching PDF reports" });
+  }*/
+
+      for (let report of pdfReports.rows) {
+        const signedurl = await getSignedUrl(
+          s3Client,
+          new GetObjectCommand({
+            Bucket: bucketName,
+            Key: `${report.file_path}.pdf`,
+          }),
+          { expiresIn: 60 }
+        );
+
+        report.signedurl = signedurl;
+      }
+      res.json(pdfReports.rows);
+    } catch (err) {
+      console.error(err);
+      res
+        .status(500)
+        .json({ error: "An error occurred while fetching PDF reports" });
+    }
+  }
+);
+
+//app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));

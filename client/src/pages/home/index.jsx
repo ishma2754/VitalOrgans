@@ -11,7 +11,9 @@ export default function Home() {
 
   const getFormData = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/${userEmail}`);
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_SERVERURL}/${userEmail}`
+      );
       const json = await response.json();
       setFormData(json);
     } catch (err) {
@@ -37,7 +39,7 @@ export default function Home() {
 
   const postData = async () => {
     try {
-      const response = await fetch(`http://localhost:8000`, {
+      const response = await fetch(`${import.meta.env.VITE_APP_SERVERURL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -53,7 +55,7 @@ export default function Home() {
 
   const updateData = async () => {
     try {
-      const response = await fetch(`http://localhost:8000`, {
+      const response = await fetch(`${import.meta.env.VITE_APP_SERVERURL}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -69,16 +71,12 @@ export default function Home() {
 
   const handleSubmitHome = async (e) => {
     e.preventDefault();
-    /*
 
-    if (formData) {
+    if (formData && formData.length > 0) {
       await updateData();
     } else {
       await postData();
     }
-      */
-    await postData();
-   
   };
 
   const handleChangeHome = (e) => {

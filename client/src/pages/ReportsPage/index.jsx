@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { Document, Page } from "react-pdf"; // Correct import for react-pdf
+import { Document, Page } from "react-pdf"; 
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 
@@ -16,7 +16,7 @@ export default function ReportsPage() {
   const userEmail = cookies.Email;
 
   useEffect(() => {
-    fetchPdfReports(); // Fetch PDF reports when component mounts
+    fetchPdfReports(); 
   }, []);
 
   const handleFileChange = (event) => {
@@ -35,7 +35,7 @@ export default function ReportsPage() {
     formData.append("user_email", cookies.Email);
 
     try {
-      await axios.post("http://localhost:8000/ReportsPage", formData);
+      await axios.post(`${import.meta.env.VITE_APP_SERVERURL}/ReportsPage`, formData);
       alert("PDF file uploaded successfully");
       fetchPdfReports();
     } catch (error) {
@@ -47,7 +47,7 @@ export default function ReportsPage() {
   const fetchPdfReports = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/ReportsPage/${cookies.Email}`
+        `${import.meta.env.VITE_APP_SERVERURL}/ReportsPage/${cookies.Email}`
       );
       setPdfReports(response.data);
     } catch (error) {
@@ -57,7 +57,7 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="mt-10 mb-40">
+    <div className="mt-10 mb-40 mx-8 ">
       <div className="">
         <input type="file" onChange={handleFileChange} />
         <button
@@ -83,16 +83,13 @@ export default function ReportsPage() {
             <div className="pdf-details p-5 relative">
               <h3 className="font-bold">{report.file_name}</h3>
               <div className="pdf-container relative w-full h-64 overflow-hidden">
-                <Document file={`http://localhost:8000/${report.file_path}`}>
-                  <Page pageNumber={1} scale={0.8} />{" "}
-                  {/* Adjust scale value as needed (e.g., 0.8) */}
+                <Document file={report.signedurl}>
+                  <Page pageNumber={1} scale={0.8} />
                 </Document>
               </div>
               <div className="mt-2">
-                {" "}
-                {/* Add margin-top to create space */}
                 <a
-                  href={`http://localhost:8000/${report.file_path}`}
+                  href={report.signedurl}
                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   style={{ display: "inline-block" }}
                 >

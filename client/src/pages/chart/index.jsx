@@ -56,7 +56,7 @@ export default function ChartPage() {
             y: inputValuesItem.bloodglucosefasting,
           },
           { x: "Blood Glucose PP", y: inputValuesItem.bloodglucosepp },
-          { x: "Creatinine", y: inputValuesItem.creatinine },
+          { x: "Creatinine", y:inputValuesItem.creatinine },
         ];
 
         const colors = seriesData.map((dataPoint) =>
