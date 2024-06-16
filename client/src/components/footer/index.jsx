@@ -2,18 +2,37 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="bg-white dark:bg-gray-900 mt-8">
-      <div className="px-4 py-6 bg-gray-100 dark:bg-gray-700 md:flex md:items-center md:justify-between">
-        <span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
-          © 2024 <a href="https://flowbite.com/">VitalOrgans</a> By ISHMA KHAN
+    <footer className="bg-RussianViolet mt-8" >
+      <div className="px-4 py-6 md:flex md:items-center md:justify-between">
+        <span className="text-sm text-white sm:text-center">
+          © 2024 <a href="#">VitalOrgans</a> By ISHMA KHAN
         </span>
         <div className="flex mt-4 sm:justify-center md:mt-0 space-x-5 rtl:space-x-reverse">
           <a
-            href="#"
-            className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            href="mailto:your_ishmakhan1995@gmail.com"
+           className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             <svg
-              className="w-6 h-6 text-gray-800 dark:text-white"
+              className="w-6 h-6 text-white hover:text-hoverColor"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M2.038 5.61A2.01 2.01 0 0 0 2 6v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6c0-.12-.01-.238-.03-.352l-.866.65-7.89 6.032a2 2 0 0 1-2.429 0L2.884 6.288l-.846-.677Z" />
+              <path d="M20.677 4.117A1.996 1.996 0 0 0 20 4H4c-.225 0-.44.037-.642.105l.758.607L12 10.742 19.9 4.7l.777-.583Z" />
+            </svg>
+
+            <span className="sr-only">Email</span>
+          </a>
+          <a
+            href="https://x.com/Ishma2754"
+            className="text-white hover:text-hoverColor"
+          >
+            <svg
+              className="w-6 h-6 text-white hover:text-hoverColor"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -27,11 +46,11 @@ export default function Footer() {
             <span className="sr-only">Twitter page</span>
           </a>
           <a
-            href="#"
-            className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            href="https://github.com/ishma2754"
+            className="text-white hover:text-hoverColor"
           >
             <svg
-              className="w-6 h-6"
+              className="w-6 h-6 hover:text-hoverColor"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -46,11 +65,11 @@ export default function Footer() {
             <span className="sr-only">GitHub account</span>
           </a>
           <a
-            href="#"
-            className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            href="https://www.linkedin.com/in/ishma-khan-3765992a5/"
+            className="text-white hover:text-hoverColor"
           >
             <svg
-              className="w-6 h-6"
+              className="w-6 h-6 hover:text-hoverColor"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="30"

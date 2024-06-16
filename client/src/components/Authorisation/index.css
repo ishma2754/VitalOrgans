@@ -20,10 +20,10 @@
   max-width: 500px; 
   margin: 20px; 
   border-radius: 10px;
+  border: 4px solid #32174D;
   overflow: hidden;
   box-shadow: rgba(0, 0, 0, 0.5) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
   min-height: 400px;
-
   display: flex;
   flex-direction: column; 
 }
@@ -38,7 +38,7 @@
   width: 100%;
   padding: 12px; 
   margin-bottom: 15px; 
-  border: 1px solid #ccc;
+  border: 2px solid #C77DFF;
   border-radius: 20px; 
   font-size: 14px;
   box-sizing: border-box; 
@@ -47,7 +47,7 @@
 }
 
 .auth-container-box input:focus {
-  border-color: rgb(108, 115, 148); 
+  border-color: #32174D; 
   outline: none; 
 }
 
@@ -62,28 +62,46 @@
   border: none;
   padding: 10px;
   background-color: transparent;
-  color: rgb(35, 38, 47);
+  color: black;
   cursor: pointer; 
 }
 
 .auth-options button:hover {
-  background-color: rgb(230, 230, 230); 
+  background-color: #735d85; 
 }
 
+.auth-options button.active {
+  background-color: #32174D;
+  color: white;
+}
+
+
 .create {
-  border: 1.5px solid rgb(108, 115, 148);
-  color: rgb(108, 115, 148);
+  border: 1.5px solid #C77DFF;
+  color:black;
   text-transform: uppercase;
   cursor: pointer; 
 }
 
 .create:hover {
-  background-color: rgb(131, 138, 172);
+  background-color: #32174D;
+  border: #32174D;
+  color: white;
 }
 
 .create:active {
-  background-color: rgb(108, 115, 148);
-  color: rgb(255, 255, 255);
+  background-color: #735d85;
+  color: white;
+}
+
+.error{
+  color: red;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.default{
+  font-size: 13px;
 }
 
 
@@ -102,7 +120,6 @@
 
   .auth-options button {
     width: 100%; 
-    margin-bottom: 10px; 
   }
 
   .auth-options button:last-child {
@@ -115,3 +132,4 @@
     width: 100%;
   }
 }
+

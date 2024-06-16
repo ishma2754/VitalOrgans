@@ -31,13 +31,13 @@ export default function Navbar() {
         </>
       ) : (
         <>
-          <NavLink to="/" className="logo-link title">
+          <NavLink to="/" className="logo-link">
           <img src="/logo.png" alt="VitalOrgans" className="logo" />
           </NavLink>
 
           <ul>
             <li>
-              <NavLink to="/Input">Input</NavLink>
+              <NavLink to="/Input">Vitals</NavLink>
             </li>
             <li>
               <NavLink to="/ChartPage">Charts</NavLink>

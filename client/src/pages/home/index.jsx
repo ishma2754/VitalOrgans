@@ -45,7 +45,6 @@ export default function Home() {
         body: JSON.stringify(data),
       });
       if (response.status === 200) {
-        console.log("worked");
         getFormData();
       }
     } catch (err) {
@@ -61,7 +60,6 @@ export default function Home() {
         body: JSON.stringify(data),
       });
       if (response.status === 200) {
-        console.log("updated successfully");
         getFormData();
       }
     } catch (err) {
@@ -104,13 +102,13 @@ export default function Home() {
               id="name"
               value={data.name}
               onChange={handleChangeHome}
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-inputTextColor bg-transparent border-0 border-b-2 border-underlineHome appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-RussianViolet peer"
               placeholder=""
               required
             />
             <label
               htmlFor="name"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-underlineHome dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-RussianViolet peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Name
             </label>
@@ -122,13 +120,13 @@ export default function Home() {
               id="age"
               value={data.age}
               onChange={handleChangeHome}
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-inputTextColor bg-transparent border-0 border-b-2 border-underlineHome appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-RussianViolet peer"
               placeholder=" "
               required
             />
             <label
               htmlFor="age"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+             className="peer-focus:font-medium absolute text-sm text-underlineHome dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-RussianViolet peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Age
             </label>
@@ -143,13 +141,13 @@ export default function Home() {
               id="emergencycontact"
               value={data.emergencycontact}
               onChange={handleChangeHome}
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             className="block py-2.5 px-0 w-full text-sm text-inputTextColor bg-transparent border-0 border-b-2 border-underlineHome appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-RussianViolet peer"
               placeholder=" "
               required
             />
             <label
               htmlFor="emergencycontact"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-underlineHome dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-RussianViolet peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Emergency Contact
             </label>
@@ -160,21 +158,19 @@ export default function Home() {
               id="gender"
               value={data.gender}
               onChange={handleChangeHome}
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-inputTextColor bg-transparent border-0 border-b-2 border-underlineHome appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-RussianViolet peer"
               required
             >
-              <option value="" disabled>
+              <option  value="" disabled>
                 Select Gender
               </option>
               <option value="male">Male</option>
               <option value="female">Female</option>
-              <option value="non-binary">Non-binary</option>
-              <option value="transgender">Transgender</option>
               <option value="other">Other</option>
             </select>
             <label
               htmlFor="gender"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+             className="peer-focus:font-medium absolute text-sm text-underlineHome dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-RussianViolet peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Gender
             </label>
@@ -187,7 +183,7 @@ export default function Home() {
               id="bloodgroup"
               value={data.bloodgroup}
               onChange={handleChangeHome}
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-inputTextColor bg-transparent border-0 border-b-2 border-underlineHome appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-RussianViolet peer"
               required
             >
               <option value="" disabled>
@@ -204,7 +200,7 @@ export default function Home() {
             </select>
             <label
               htmlFor="bloodgroup"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-underlineHome dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-RussianViolet peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Blood Group
             </label>
@@ -213,9 +209,9 @@ export default function Home() {
 
         <label
           htmlFor="medicalconditions"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-underlineHome  dark:text-white"
         >
-          Medical Conditions
+          Medical Conditions And Presciptions
         </label>
         <textarea
           id="medicalconditions"
@@ -227,47 +223,47 @@ export default function Home() {
             }))
           }
           rows="4"
-          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-6"
+          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-underlineHome focus:ring-blue-500 focus:border-RussianViolet dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-6"
           placeholder=""
         ></textarea>
 
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
+          className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
           onSubmit={handleSubmitHome}
         >
           Submit
         </button>
       </form>
 
-      <div className="max-w-md mx-auto border border-gray-300 rounded p-4 mt-8">
-        <h2 className="text-lg font-semibold mb-4">Form Data</h2>
+      <div className="max-w-md mx-auto border-4 border-RussianViolet rounded-lg p-4 mt-8">
+        <h2 className="text-lg text-inputTextColor font-semibold mb-4">USER DETAILS</h2>
         <div className="">
           {sortedFormData?.map((formDataItem) => (
             <div key={formDataItem.id} className="grid grid-cols-3 gap-4">
               <div>
-                <div className="font-semibold">Name</div>
-                <div>{formDataItem.name}</div>
+                <div className="font-semibold text-underlineHome">Name</div>
+                <div className="text-inputTextColor">{formDataItem.name}</div>
               </div>
               <div>
-                <div className="font-semibold">Age</div>
-                <div>{formDataItem.age}</div>
+                <div className="font-semibold text-underlineHome">Age</div>
+                <div className="text-inputTextColor">{formDataItem.age}</div>
               </div>
               <div>
-                <div className="font-semibold">Blood Group</div>
-                <div>{formDataItem.bloodgroup}</div>
+                <div className="font-semibold text-underlineHome">Blood Group</div>
+                <div className="text-inputTextColor">{formDataItem.bloodgroup}</div>
               </div>
               <div>
-                <div className="font-semibold">Emergency Contact</div>
-                <div>{formDataItem.emergencycontact}</div>
+                <div className="font-semibold text-underlineHome">Emergency Contact</div>
+                <div className="text-inputTextColor">{formDataItem.emergencycontact}</div>
               </div>
               <div>
-                <div className="font-semibold">Gender</div>
-                <div>{formDataItem.gender}</div>
+                <div className="font-semibold text-underlineHome ">Gender</div>
+                <div className="text-inputTextColor">{formDataItem.gender}</div>
               </div>
               <div className="col-span-3">
-                <div className="font-semibold">Medical Conditions</div>
-                <div>{formDataItem.medicalconditions}</div>
+                <div className="font-semibold text-underlineHome">Medical Conditions And Prescriptions</div>
+                <div className="text-inputTextColor" >{formDataItem.medicalconditions}</div>
               </div>
             </div>
           ))}

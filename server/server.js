@@ -13,6 +13,7 @@ const {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
@@ -36,15 +37,6 @@ app.use(express.json());
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
-/*
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});*/
 
 const storage = multer.memoryStorage();
 
@@ -52,7 +44,6 @@ const fileFilter = (req, file, cb) => {
   const filetypes = /pdf/;
   const mimetype = filetypes.test(file.mimetype);
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  //const extname = path.extname(file.originalname).toLowerCase();
 
   if (mimetype && extname) {
     return cb(null, true);
@@ -67,6 +58,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
+//upload reports
 app.post("/ReportsPage", upload.single("pdfFile"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "PDF file is required" });
@@ -112,6 +104,7 @@ app.post("/ReportsPage", upload.single("pdfFile"), async (req, res) => {
   }
 });
 
+//get reports
 app.get("/ReportsPage/:userEmail", async (req, res) => {
   const { userEmail } = req.params;
 
@@ -120,14 +113,6 @@ app.get("/ReportsPage/:userEmail", async (req, res) => {
       "SELECT * FROM pdf_reports WHERE user_email = $1",
       [userEmail]
     );
-    /*
-    res.json(pdfReports.rows);
-  } catch (err) {
-    console.error(err);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching PDF reports" });
-  }*/
 
     for (let report of pdfReports.rows) {
       const signedurl = await getSignedUrl(
@@ -151,8 +136,41 @@ app.get("/ReportsPage/:userEmail", async (req, res) => {
   }
 });
 
-//get all the input data
+// Delete a report
+app.delete("/ReportsPage/:id", async (req, res) => {
+  const { id } = req.params;
 
+  try {
+    const pdfReport = await pool.query(
+      "SELECT * FROM pdf_reports WHERE id = $1",
+      [id]
+    );
+
+    if (pdfReport.rows.length === 0) {
+      return res.status(404).json({ error: "PDF report not found" });
+    }
+
+    const key = `${pdfReport.rows[0].file_path}.pdf`;
+
+    const deleteParams = {
+      Bucket: bucketName,
+      Key: key,
+    };
+
+    await s3Client.send(new DeleteObjectCommand(deleteParams));
+
+    await pool.query("DELETE FROM pdf_reports WHERE id = $1", [id]);
+
+    res.json({ message: "PDF file deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the PDF file" });
+  }
+});
+
+//get all the input data
 app.get("/Input/:userEmail", async (req, res) => {
   const { userEmail } = req.params;
 
@@ -169,7 +187,6 @@ app.get("/Input/:userEmail", async (req, res) => {
 
 //get all the form data
 app.get("/:userEmail", async (req, res) => {
-  console.log(req);
   const { userEmail } = req.params;
 
   try {
@@ -282,19 +299,7 @@ app.post("/Input", async (req, res) => {
     creatinine,
     date,
   } = req.body;
-  console.log(
-    user_email,
-    bpsys,
-    bpdia,
-    pulserate,
-    totalcholesterol,
-    hdlcholesterol,
-    ldlcholesterol,
-    bloodglucosefasting,
-    bloodglucosepp,
-    creatinine,
-    date
-  );
+ 
   const id = uuidv4();
   try {
     const newInputValues = pool.query(
@@ -321,7 +326,6 @@ app.post("/Input", async (req, res) => {
 });
 
 //sign up
-
 app.post("/signup", async (req, res) => {
   const { email, password, license_key } = req.body;
   const salt = bcrypt.genSaltSync(10);
@@ -330,11 +334,20 @@ app.post("/signup", async (req, res) => {
   let role = "user";
 
   if (license_key) {
-    const licensePattern = /^HSP-\d{4,5}-\d{4}-IN$/;
-    if (licensePattern.test(license_key)) {
-      role = "admin";
+    const existingAdmin = await pool.query(
+      "SELECT * FROM users WHERE role = 'admin' AND license_key = $1",
+      [license_key]
+    );
+
+    if (existingAdmin.rows.length > 0) {
+      return res.status(400).json({ detail: "License key is already in use" });
     } else {
-      return res.status(400).json({ detail: "Invalid license key format" });
+      const licensePattern = /^HSP-\d{4,5}-\d{4}-IN$/;
+      if (licensePattern.test(license_key)) {
+        role = "admin";
+      } else {
+        return res.status(400).json({ detail: "Invalid license key format" });
+      }
     }
   }
 
@@ -358,26 +371,29 @@ app.post("/signup", async (req, res) => {
 //login
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const users = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
-    if (!users.rows.length)
-      return res.json({ details: "User does not exist!" });
+    if (!users.rows.length) {
+      return res.status(404).json({ detail: "User does not exist!" });
+    }
 
     const user = users.rows[0];
     const success = await bcrypt.compare(password, user.hashed_password);
-    const token = jwt.sign({ email, role: user.role }, "secret", {
-      expiresIn: "1hr",
-    });
 
     if (success) {
-      res.json({ email: user.email, role: user.role, token });
+      const token = jwt.sign({ email: user.email, role: user.role }, "secret", {
+        expiresIn: "1hr",
+      });
+      res.status(200).json({ email: user.email, role: user.role, token });
     } else {
-      res.json({ detail: "Login failed" });
+      res.status(401).json({ detail: "Incorrect password" });
     }
   } catch (err) {
     console.error(err);
+    res.status(500).json({ detail: "Internal server error" });
   }
 });
 
@@ -450,7 +466,6 @@ app.get(
   authenticateJWT,
   authorizeRole(["admin"]),
   async (req, res) => {
-    /*
     const { userEmail } = req.params;
 
     try {
@@ -458,30 +473,6 @@ app.get(
         "SELECT * FROM pdf_reports WHERE user_email = $1",
         [userEmail]
       );
-      res.json(pdfReports.rows);
-    } catch (err) {
-      console.log(err);
-      res
-        .status(500)
-        .json({ error: "An error occurred while fetching PDF data" });
-    }
-  }
-    */
-    const { userEmail } = req.params;
-
-    try {
-      const pdfReports = await pool.query(
-        "SELECT * FROM pdf_reports WHERE user_email = $1",
-        [userEmail]
-      );
-      /*
-    res.json(pdfReports.rows);
-  } catch (err) {
-    console.error(err);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching PDF reports" });
-  }*/
 
       for (let report of pdfReports.rows) {
         const signedurl = await getSignedUrl(
@@ -504,7 +495,5 @@ app.get(
     }
   }
 );
-
-//app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));

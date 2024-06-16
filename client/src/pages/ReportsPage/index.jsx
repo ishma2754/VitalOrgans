@@ -5,7 +5,7 @@ import { Document, Page } from "react-pdf";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 
-// To fix missing worker:
+
 import { pdfjs } from "react-pdf";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.js`;
 
@@ -15,6 +15,7 @@ export default function ReportsPage() {
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const userEmail = cookies.Email;
 
+  
   useEffect(() => {
     fetchPdfReports(); 
   }, []);
@@ -56,21 +57,27 @@ export default function ReportsPage() {
     }
   };
 
+  const deletePDF = async (id) => {
+    try {
+      const response = await axios.delete(`${import.meta.env.VITE_APP_SERVERURL}/ReportsPage/${id}`);
+      
+      if (response.status === 200) {
+        fetchPdfReports(); 
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="mt-10 mb-40 mx-8 ">
       <div className="">
         <input type="file" onChange={handleFileChange} />
         <button
           onClick={handleUpload}
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 block mt-4"
+         className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-4 mb-8"
         >
           Upload PDF
-        </button>
-        <button
-          onClick={fetchPdfReports}
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 block mt-4 mb-4"
-        >
-          Fetch PDF Reports
         </button>
       </div>
 
@@ -78,10 +85,10 @@ export default function ReportsPage() {
         {pdfReports.map((report) => (
           <div
             key={report.id}
-            className="pdf-item relative bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+            className="pdf-item relative rounded-lg border-underlineHome bg-white border-4  shadow dark:bg-gray-800 dark:border-gray-700"
           >
             <div className="pdf-details p-5 relative">
-              <h3 className="font-bold">{report.file_name}</h3>
+              <h3 className="font-bold text-RussianViolet">{report.file_name}</h3>
               <div className="pdf-container relative w-full h-64 overflow-hidden">
                 <Document file={report.signedurl}>
                   <Page pageNumber={1} scale={0.8} />
@@ -90,11 +97,17 @@ export default function ReportsPage() {
               <div className="mt-2">
                 <a
                   href={report.signedurl}
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-6"
                   style={{ display: "inline-block" }}
                 >
                   Download PDF
                 </a>
+                <button 
+                onClick={() => deletePDF(report.id)}
+                className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                style={{ display: "inline-block" }}>
+                  Delete PDF
+                </button>
               </div>
             </div>
           </div>
