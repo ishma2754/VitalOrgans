@@ -4,8 +4,7 @@
   "scripts": {
     "build": "cd server && npm install",
     "server": "node ./server/server.js",
-    "client": "cd client && npm run dev",
-     "start": "npm run server"
+    "client": "cd client && npm run dev"
   },
   "description": "",
   "dependencies": {
