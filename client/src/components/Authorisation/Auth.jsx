@@ -90,9 +90,7 @@ export default function Auth() {
           />
 
           {error && <p className="error">{error}</p>}
-          {<p className="default">ex. Hospital EMAIL= ishma@admin.com, PASSWORD=789</p>}
-          {<p className="default">ex. Patient EMAIL= ishma@test.com, PASSWORD=789</p>}
-          {}
+       
         </form>
 
         <div className="auth-options">

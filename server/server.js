@@ -397,6 +397,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+//Role based authentication middleware
 const authenticateJWT = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
 
