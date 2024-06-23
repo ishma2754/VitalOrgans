@@ -26,6 +26,8 @@ export default function Navbar() {
     setMenuOpen(!menuOpen);
   };
 
+  const firstLetter = userEmail ? userEmail.charAt(0).toUpperCase() : "";
+
   return (
     <nav>
       {userRole === "admin" ? (
@@ -51,7 +53,7 @@ export default function Navbar() {
               <NavLink to="/ReportsPage">Reports</NavLink>
             </li>
             <li className="circle" onClick={toggleDetails}>
-              <span></span>
+              <span>{firstLetter}</span>
             </li>
             {showDetails && (
               <li className="details">
