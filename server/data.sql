@@ -1,4 +1,4 @@
-CREATE DATABASE vitals;
+CREATE DATABASE vitalsdatabase;
 
 CREATE TABLE formData (
   id VARCHAR(255) PRIMARY KEY,
