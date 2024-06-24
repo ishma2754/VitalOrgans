@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Document, Page } from "react-pdf"; 
@@ -12,7 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3
 export default function ReportsPage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [pdfReports, setPdfReports] = useState([]);
-  const [cookies, setCookie, removeCookie] = useCookies(null);
+  const [cookies] = useCookies(null);
   const userEmail = cookies.Email;
 
   
@@ -33,10 +33,10 @@ export default function ReportsPage() {
 
     const formData = new FormData();
     formData.append("pdfFile", selectedFile);
-    formData.append("user_email", cookies.Email);
+    formData.append("user_email", userEmail);
 
     try {
-      await axios.post(`${import.meta.env.VITE_APP_SERVERURL}/ReportsPage`, formData);
+      await axios.post(`${process.env.REACT_APP_SERVERURL}/ReportsPage`, formData);
       alert("PDF file uploaded successfully");
       fetchPdfReports();
     } catch (error) {
@@ -48,7 +48,7 @@ export default function ReportsPage() {
   const fetchPdfReports = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_APP_SERVERURL}/ReportsPage/${cookies.Email}`
+        `${process.env.REACT_APP_SERVERURL}/ReportsPage/${userEmail}`
       );
       setPdfReports(response.data);
     } catch (error) {
@@ -59,7 +59,7 @@ export default function ReportsPage() {
 
   const deletePDF = async (id) => {
     try {
-      const response = await axios.delete(`${import.meta.env.VITE_APP_SERVERURL}/ReportsPage/${id}`);
+      const response = await axios.delete(`${process.env.REACT_APP_SERVERURL}/ReportsPage/${id}`);
       
       if (response.status === 200) {
         fetchPdfReports(); 
@@ -75,7 +75,7 @@ export default function ReportsPage() {
         <input type="file" onChange={handleFileChange} />
         <button
           onClick={handleUpload}
-         className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-4 mb-8"
+         className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-4 mb-8"
         >
           Upload PDF
         </button>
@@ -85,7 +85,7 @@ export default function ReportsPage() {
         {pdfReports.map((report) => (
           <div
             key={report.id}
-            className="pdf-item relative rounded-lg border-underlineHome bg-white border-4  shadow dark:bg-gray-800 dark:border-gray-700"
+            className="pdf-item relative rounded-lg border-underlineHome bg-white border-4  shadow"
           >
             <div className="pdf-details p-5 relative">
               <h3 className="font-bold text-RussianViolet">{report.file_name}</h3>
@@ -97,14 +97,14 @@ export default function ReportsPage() {
               <div className="mt-2 flex justify-between">
                 <a
                   href={report.signedurl}
-                  className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-6"
+                  className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm px-5 py-2.5 text-center  mr-6"
                   style={{ display: "inline-block" }}
                 >
                   Download PDF
                 </a>
                 <button 
                 onClick={() => deletePDF(report.id)}
-                className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm px-5 py-2.5 text-center"
                 style={{ display: "inline-block" }}>
                   Delete PDF
                 </button>

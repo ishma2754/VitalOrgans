@@ -2,7 +2,7 @@
   "name": "vitalorgans",
   "version": "1.0.0",
   "scripts": {
-    "build": "cd client && npm install",
+    "build": "cd server && npm install",
     "server": "node ./server/server.js",
     "client": "cd client && npm run dev"
   },

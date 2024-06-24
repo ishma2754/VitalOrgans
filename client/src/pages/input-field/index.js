@@ -1,12 +1,16 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/index";
 
+
+
 export default function Input() {
   const {
     dataInput,
     handleChange,
     handleSubmit,
   } = useContext(GlobalContext);
+
+  
 
   return (
     <>
@@ -18,8 +22,8 @@ export default function Input() {
             id="date"
             value={dataInput.date}
             onChange={handleChange}
-            className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder=""
+            className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
+            placeholder="Select a date"
             required
           />
         </div>
@@ -27,7 +31,7 @@ export default function Input() {
           <div>
             <label
               htmlFor="bpsys"
-              className="block mb-2 text-sm font-bold text-RussianViolet dark:text-white "
+              className="block mb-2 text-sm font-bold text-RussianViolet"
             >
               BP SYS / mmHg
             </label>
@@ -37,14 +41,14 @@ export default function Input() {
               id="bpsys"
               value={dataInput.bpsys}
               onChange={handleChange}
-              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
               required
             />
           </div>
           <div>
             <label
               htmlFor="bpdia"
-              className="block mb-2 text-sm font-bold text-RussianViolet dark:text-white "
+              className="block mb-2 text-sm font-bold text-RussianViolet"
             >
               BP DIA / mmHg
             </label>
@@ -54,7 +58,7 @@ export default function Input() {
               id="bpdia"
               value={dataInput.bpdia}
               onChange={handleChange}
-              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
               placeholder=""
               required
             />
@@ -62,7 +66,7 @@ export default function Input() {
           <div>
             <label
               htmlFor="pulserate"
-              className="block mb-2 text-sm font-bold text-RussianViolet dark:text-white "
+              className="block mb-2 text-sm font-bold text-RussianViolet"
             >
               Pulse Rate beats/min
             </label>
@@ -72,7 +76,7 @@ export default function Input() {
               id="pulserate"
               value={dataInput.pulserate}
               onChange={handleChange}
-              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
               placeholder=""
               required
             />
@@ -80,7 +84,7 @@ export default function Input() {
           <div>
             <label
               htmlFor="totalcholesterol"
-              className="block mb-2 text-sm font-bold text-RussianViolet dark:text-white "
+              className="block mb-2 text-sm font-bold text-RussianViolet"
             >
               Total Cholesterol mg/dL
             </label>
@@ -90,7 +94,7 @@ export default function Input() {
               id="totalcholesterol"
               value={dataInput.totalcholesterol}
               onChange={handleChange}
-              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
               placeholder=""
               required
             />
@@ -98,7 +102,7 @@ export default function Input() {
           <div>
             <label
               htmlFor="hdlcholesterol"
-              className="block mb-2 text-sm font-bold text-RussianViolet dark:text-white "
+              className="block mb-2 text-sm font-bold text-RussianViolet"
             >
               HDL Cholesterol mg/dL
             </label>
@@ -108,7 +112,7 @@ export default function Input() {
               id="hdlcholesterol"
               value={dataInput.hdlcholesterol}
               onChange={handleChange}
-              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
               placeholder=""
               required
             />
@@ -116,7 +120,7 @@ export default function Input() {
           <div>
             <label
               htmlFor="ldlcholesterol"
-              className="block mb-2 text-sm font-bold text-RussianViolet dark:text-white "
+              className="block mb-2 text-sm font-bold text-RussianViolet"
             >
               LDL Cholesterol mg/dL
             </label>
@@ -126,7 +130,7 @@ export default function Input() {
               id="ldlcholesterol"
               value={dataInput.ldlcholesterol}
               onChange={handleChange}
-              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
               placeholder=""
               required
             />
@@ -134,7 +138,7 @@ export default function Input() {
           <div>
             <label
               htmlFor="bloodglucosefasting"
-              className="block mb-2 text-sm font-bold text-RussianViolet dark:text-white "
+              className="block mb-2 text-sm font-bold text-RussianViolet"
             >
               Blood Glucose(Fasting) mg/dL
             </label>
@@ -144,7 +148,7 @@ export default function Input() {
               id="bloodglucosefasting"
               value={dataInput.bloodglucosefasting}
               onChange={handleChange}
-              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
               placeholder=""
               required
             />
@@ -152,7 +156,7 @@ export default function Input() {
           <div>
             <label
               htmlFor="bloodglucosepp"
-              className="block mb-2 text-sm font-bold text-RussianViolet dark:text-white "
+              className="block mb-2 text-sm font-bold text-RussianViolet"
             >
               Blood Glucose(PP) mg/dL
             </label>
@@ -162,7 +166,7 @@ export default function Input() {
               id="bloodglucosepp"
               value={dataInput.bloodglucosepp}
               onChange={handleChange}
-              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
               placeholder=""
               required
             />
@@ -170,7 +174,7 @@ export default function Input() {
           <div>
             <label
               htmlFor="creatinine"
-              className="block mb-2 text-sm font-bold text-RussianViolet dark:text-white "
+              className="block mb-2 text-sm font-bold text-RussianViolet"
             >
               Creatinine µmol/l
             </label>
@@ -180,7 +184,7 @@ export default function Input() {
               id="creatinine"
               value={dataInput.creatinine}
               onChange={handleChange}
-              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-2  border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-blue-500 focus:border-RussianViolet block w-full p-2.5"
               placeholder=""
               required
             />
@@ -190,7 +194,7 @@ export default function Input() {
         <button
           type="submit"
           onSubmit={handleSubmit}
-          className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-8"
+          className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mb-8"
         >
           Submit
         </button>

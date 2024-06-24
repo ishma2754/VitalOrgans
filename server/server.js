@@ -35,8 +35,8 @@ const s3Client = new S3Client({
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
 const generateFileName = (bytes = 32) =>
@@ -189,6 +189,30 @@ app.get("/Input/:userEmail", async (req, res) => {
   }
 });
 
+//delete vitals data
+app.delete("/Input/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const inputValues = await pool.query(
+      "SELECT * FROM inputValues WHERE id = $1",
+      [id]
+    );
+
+    if (inputValues.rows.length === 0) {
+      return res.status(404).json({ error: "vitals not found" });
+    }
+
+    await pool.query("DELETE FROM inputValues WHERE id = $1", [id]);
+
+    res.json({ message: "Vitals deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the vitals" });
+  }
+});
+
 //get all the form data
 app.get("/:userEmail", async (req, res) => {
   const { userEmail } = req.params;
@@ -303,7 +327,7 @@ app.post("/Input", async (req, res) => {
     creatinine,
     date,
   } = req.body;
- 
+
   const id = uuidv4();
   try {
     const newInputValues = pool.query(

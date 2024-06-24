@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./index.css";
 import { useCookies } from "react-cookie";
 import { Document, Page } from "react-pdf";
@@ -6,14 +6,13 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import { pdfjs } from "react-pdf";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.js`;
+import { format, parseISO } from "date-fns";
 
 export default function AdminFetchUser() {
   const [userEmail, setUserEmail] = useState("");
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [cookies] = useCookies(["AuthToken"]);
-
-
 
   const handleFetch = async () => {
     setError(null);
@@ -27,11 +26,10 @@ export default function AdminFetchUser() {
     }
 
     sessionStorage.removeItem("userData");
- 
 
     try {
       const formDataResponse = await fetch(
-        `${import.meta.env.VITE_APP_SERVERURL}/AdminPage/${userEmail}`,
+        `${process.env.REACT_APP_SERVERURL}/AdminPage/${userEmail}`,
         {
           method: "GET",
           headers: {
@@ -51,9 +49,7 @@ export default function AdminFetchUser() {
       }
 
       const inputValuesResponse = await fetch(
-        `${
-          import.meta.env.VITE_APP_SERVERURL
-        }/AdminPage/InputValues/${userEmail}`,
+        `${process.env.REACT_APP_SERVERURL}/AdminPage/InputValues/${userEmail}`,
         {
           method: "GET",
           headers: {
@@ -73,7 +69,7 @@ export default function AdminFetchUser() {
       }
 
       const pdfDataResponse = await fetch(
-        `${import.meta.env.VITE_APP_SERVERURL}/AdminPage/PDFData/${userEmail}`,
+        `${process.env.REACT_APP_SERVERURL}/AdminPage/PDFData/${userEmail}`,
         {
           method: "GET",
           headers: {
@@ -89,9 +85,12 @@ export default function AdminFetchUser() {
         return;
       }
 
-      const sortedInputValues = inputValues.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
+      const sortedInputValues = inputValues
+        .map((data) => ({
+          ...data,
+          date: format(parseISO(data.date), "yyyy-MM-dd"),
+        }))
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
 
       const fetchedData = {
         formData: formData,
@@ -99,7 +98,6 @@ export default function AdminFetchUser() {
         pdfData: pdfData,
       };
 
-      
       sessionStorage.setItem("userData", JSON.stringify(fetchedData));
 
       setUserData(fetchedData);
@@ -118,22 +116,20 @@ export default function AdminFetchUser() {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <div className="admin-fetch-user mx-8 flex-grow">
-          <h2 className="text-xl font-bold leading-tight tracking-tight text-RussianViolet md:text-2xl dark:text-white mb-5 mt-5">
+        <div className="admin-fetch-user mx-4 flex-grow">
+          <h2 className="text-xl font-bold leading-tight tracking-tight text-RussianViolet md:text-2xl mb-5 mt-5">
             FETCH USER DATA
           </h2>
           <input
             type="email"
             placeholder="Enter user email"
             className="bg-gray-50 border-2 border-underlineHome text-inputTextColor text-sm rounded-lg focus:ring-RussianViolet focus:border-RussianViolet
-            block w-full md:w-1/4 p-2.5 
-            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-            dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            block w-full md:w-1/4 p-2.5 "
             value={userEmail}
             onChange={(e) => setUserEmail(e.target.value)}
           />
           <button
-            className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 block mt-4"
+            className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center block mt-4"
             onClick={handleFetch}
           >
             Fetch Data
@@ -143,7 +139,9 @@ export default function AdminFetchUser() {
           {userData && (
             <div>
               <div className="max-w-md mx-auto border-4 border-RussianViolet rounded-lg p-4 mt-8">
-              <h2 className="text-lg text-inputTextColor font-semibold mb-4">USER DETAILS</h2>
+                <h2 className="text-lg text-inputTextColor font-semibold mb-4">
+                  USER DETAILS
+                </h2>
                 <div>
                   {userData.formData.map((userDataItem) => (
                     <div
@@ -151,28 +149,52 @@ export default function AdminFetchUser() {
                       className="grid grid-cols-3 gap-4"
                     >
                       <div>
-                        <div className="font-semibold text-underlineHome">Name</div>
-                        <div className="text-inputTextColor">{userDataItem.name}</div>
+                        <div className="font-semibold text-underlineHome">
+                          Name
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userDataItem.name}
+                        </div>
                       </div>
                       <div>
-                        <div className="font-semibold text-underlineHome ">Age</div>
-                        <div className="text-inputTextColor">{userDataItem.age}</div>
+                        <div className="font-semibold text-underlineHome ">
+                          Age
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userDataItem.age}
+                        </div>
                       </div>
                       <div>
-                        <div className="font-semibold text-underlineHome ">Blood Group</div>
-                        <div className="text-inputTextColor">{userDataItem.bloodgroup}</div>
+                        <div className="font-semibold text-underlineHome ">
+                          Blood Group
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userDataItem.bloodgroup}
+                        </div>
                       </div>
                       <div>
-                        <div className="font-semibold text-underlineHome">Emergency Contact</div>
-                        <div className="text-inputTextColor">{userDataItem.emergencycontact}</div>
+                        <div className="font-semibold text-underlineHome">
+                          Emergency Contact
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userDataItem.emergencycontact}
+                        </div>
                       </div>
                       <div>
-                        <div className="font-semibold text-underlineHome">Gender</div>
-                        <div className="text-inputTextColor">{userDataItem.gender}</div>
+                        <div className="font-semibold text-underlineHome">
+                          Gender
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userDataItem.gender}
+                        </div>
                       </div>
                       <div className="col-span-3">
-                        <div className="font-semibold text-underlineHome">Medical Conditions And Prescriptions</div>
-                        <div className="text-inputTextColor">{userDataItem.medicalconditions}</div>
+                        <div className="font-semibold text-underlineHome">
+                          Medical Conditions And Prescriptions
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userDataItem.medicalconditions}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -184,56 +206,84 @@ export default function AdminFetchUser() {
                   <div>
                     <div className="grid grid-cols-3 gap-4">
                       <div className="col-span-3">
-                        <div className="font-semibold text-underlineHome">DATE</div>
-                        <div  className="text-inputTextColor">{userData.inputValues[0].date}</div>
+                        <div className="font-semibold text-underlineHome">
+                          DATE
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].date}
+                        </div>
                       </div>
                       <div>
-                        <div className="font-semibold text-underlineHome">BP SYS / mmHg</div>
-                        <div  className="text-inputTextColor">{userData.inputValues[0].bpsys}</div>
+                        <div className="font-semibold text-underlineHome">
+                          BP SYS / mmHg
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].bpsys}
+                        </div>
                       </div>
                       <div>
-                        <div className="font-semibold text-underlineHome">BP DIA / mmHg</div>
-                        <div  className="text-inputTextColor">{userData.inputValues[0].bpdia}</div>
+                        <div className="font-semibold text-underlineHome">
+                          BP DIA / mmHg
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].bpdia}
+                        </div>
                       </div>
                       <div>
                         <div className="font-semibold text-underlineHome">
                           Pulse Rate beats/min
                         </div>
-                        <div  className="text-inputTextColor">{userData.inputValues[0].pulserate}</div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].pulserate}
+                        </div>
                       </div>
                       <div>
                         <div className="font-semibold text-underlineHome">
                           Total Cholesterol mg/dL
                         </div>
-                        <div  className="text-inputTextColor">{userData.inputValues[0].totalcholesterol}</div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].totalcholesterol}
+                        </div>
                       </div>
                       <div>
                         <div className="font-semibold text-underlineHome">
                           HDL Cholesterol mg/dL
                         </div>
-                        <div  className="text-inputTextColor">{userData.inputValues[0].hdlcholesterol}</div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].hdlcholesterol}
+                        </div>
                       </div>
                       <div>
                         <div className="font-semibold text-underlineHome">
                           LDL Cholesterol mg/dL
                         </div>
-                        <div  className="text-inputTextColor">{userData.inputValues[0].ldlcholesterol}</div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].ldlcholesterol}
+                        </div>
                       </div>
                       <div>
                         <div className="font-semibold text-underlineHome">
-                          Blood Glucose(Fasting) mg/dL
+                          Blood Glucose(F) mg/dL
                         </div>
-                        <div className="text-inputTextColor" >{userData.inputValues[0].bloodglucosefasting}</div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].bloodglucosefasting}
+                        </div>
                       </div>
                       <div>
                         <div className="font-semibold text-underlineHome">
                           Blood Glucose(PP) mg/dL
                         </div>
-                        <div  className="text-inputTextColor">{userData.inputValues[0].bloodglucosepp}</div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].bloodglucosepp}
+                        </div>
                       </div>
                       <div>
-                        <div className="font-semibold text-underlineHome">Creatinine µmol/l</div>
-                        <div  className="text-inputTextColor">{userData.inputValues[0].creatinine}</div>
+                        <div className="font-semibold text-underlineHome">
+                          Creatinine µmol/l
+                        </div>
+                        <div className="text-inputTextColor">
+                          {userData.inputValues[0].creatinine}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -244,10 +294,12 @@ export default function AdminFetchUser() {
                 {userData.pdfData.map((report) => (
                   <div
                     key={report.id}
-                    className="pdf-item relative rounded-lg border-RussianViolet bg-white border-4  shadow dark:bg-gray-800 dark:border-gray-700"
+                    className="pdf-item relative rounded-lg border-RussianViolet bg-white border-4  shadow"
                   >
                     <div className="pdf-details p-5 relative">
-                      <h3 className="font-bold text-underlineHome">{report.file_name}</h3>
+                      <h3 className="font-bold text-underlineHome">
+                        {report.file_name}
+                      </h3>
                       <div className="pdf-container relative w-full h-64 overflow-hidden">
                         <Document file={report.signedurl}>
                           <Page pageNumber={1} scale={0.8} />
@@ -256,7 +308,7 @@ export default function AdminFetchUser() {
                       <div className="mt-2">
                         <a
                           href={report.signedurl}
-                           className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          className="text-white bg-buttonColor hover:bg-hoverButtonColor focus:ring-4 focus:outline-none focus:ring-RussianViolet font-bold rounded-lg text-sm px-5 py-2.5 text-center"
                           style={{ display: "inline-block" }}
                         >
                           Download PDF
@@ -271,14 +323,14 @@ export default function AdminFetchUser() {
         </div>
 
         <footer className="bg-RussianViolet mt-8">
-          <div className="px-4 py-6 bg-RussianViolet dark:bg-gray-700 md:flex md:items-center md:justify-between">
+          <div className="px-4 py-6 bg-RussianViolet md:flex md:items-center md:justify-between">
             <span className="text-sm text-white sm:text-center">
               © 2024 <a href="#">VitalOrgans</a> By ISHMA KHAN
             </span>
             <div className="flex mt-4 sm:justify-center md:mt-0 space-x-5 rtl:space-x-reverse">
               <a
                 href="mailto:your_ishmakhan1995@gmail.com"
-                className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                className="text-gray-400 hover:text-gray-900"
               >
                 <svg
                   className="w-6 h-6 text-white hover:text-hoverColor"
